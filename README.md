@@ -14,7 +14,13 @@ An example of implementing the DaaS pattern using Rust
 
 ## Modules
 
-Realtime staging of data
+### RESTful microservice for realtime staging of data
+
+### Microservice for provisioning the event data
+
+### RESTful microservice to publish the report
+
+---
 
 ## Rust Lang
 [Rust related references](./docs/reference-material.md)
