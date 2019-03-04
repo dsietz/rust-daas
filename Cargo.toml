@@ -3,6 +3,29 @@ name = "rust-daas"
 version = "0.0.1"
 authors = ["dsietz"]
 edition = "2018"
-license = "MIT/Apache-2.0"
+license = "Apache-2.0"
+exclude = [
+    "target/*",
+]
+
+[lib]
+name = "daas"
+path = "src/lib.rs"
+
+[badges]
+travis-ci = { repository = "dsietz/rust-daas" }
+appveyor = { repository = "dsietz/rust-daas" }
+coveralls = { repostiory = "dsietz/rust-daas", branch = "master" }
+is-it-maintained-issue-resolution = { repository = "dsietz/rust-daas" }
+is-it-maintained-open-issues = { repository = "dsietz/rust-daas" }
+maintenance = {status = "as-is"}
 
 [dependencies]
+rocket = "0.4.0"
+serde ="1.0"
+serde_derive = "1.0"
+
+[dependencies.rocket_contrib]
+version = "0.4.0"
+default-features = false
+features = ["json"]
