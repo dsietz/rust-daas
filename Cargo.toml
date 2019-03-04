@@ -1,0 +1,8 @@
+[package]
+name = "rust-daas"
+version = "0.0.1"
+authors = ["dsietz"]
+edition = "2018"
+license = "MIT/Apache-2.0"
+
+[dependencies]
