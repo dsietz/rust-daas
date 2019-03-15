@@ -14,7 +14,18 @@ An example of implementing the DaaS pattern using Rust
 
 ## Modules
 
+## Developer Slice Setup
+- [Rust Language](./docs/reference-rust.md)
+- [CouchDB](./docs/reference-couchdb.md)
+- [Kafak](./docs/reference-kafka.md)
+
 ### RESTful microservice for realtime staging of data
+- hello world rocket service(staging.rs)
+- test driven development (web-service-tests.rs)
+- staging service with parameters (staging route)
+- authentication
+- add configurations
+
 
 ### Microservice for provisioning the event data
 

@@ -1,12 +1,11 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
 extern crate rocket;
-#[macro_use] 
 extern crate rocket_contrib;
 
 use daas::staging;
 use rocket::local::Client;
-use rocket::http::{ContentType, Status};
+use rocket::http::{ContentType, Header, Status};
 
 #[test]
 fn test_status_code_ok(){
@@ -19,23 +18,38 @@ fn test_status_code_ok(){
 
 #[test]
 fn test_stage_data_ok(){
-    let client = Client::new(staging::service()).expect("valid rocekt instance");
-    let mut response = client.post("/stage/product/clothes/iStore/5000")
+    let client = Client::new(staging::service()).expect("valid rocket instance");
+    let mut response = client.post("/stage/order/clothes/iStore/5000")
         .header(ContentType::JSON)
-        .body(r#"{ "id": 100, "data": "Hello, world!" }"#)
+        .header(Header::new("Authorization","Basic Zm9vOmJhcg=="))
+        .body(r#"{ "data": "Hello, world!" }"#)
         .dispatch();
 
     assert_eq!(response.status(), Status::Ok);
-    assert_eq!(response.body_string(), Some("{\"status\":\"ok\"}".into()));
+    assert_eq!(response.body_string(), Some("{\"status\":\"OK\"}".into()));
 }
 
 #[test]
 fn test_stage_data_bad_json(){
-    let client = Client::new(staging::service()).expect("valid rocekt instance");
-    let response = client.post("/stage/product/clothes/iStore/5000")
+    let client = Client::new(staging::service()).expect("valid rocket instance");
+    let response = client.post("/stage/order/clothes/iStore/5000")
         .header(ContentType::JSON)
-        .body(r#"{ "id": 100, "data": ... }"#)
+        .header(Header::new("Authorization","Basic Zm9vOmJhcg=="))
+        .body(r#"{ "data": ... }"#)
         .dispatch();
 
     assert_eq!(response.status(), Status::BadRequest);
+}
+
+#[test]
+fn test_stage_data_auth_ok(){
+    let client = Client::new(staging::service()).expect("valid rocket instance");
+    let mut response = client.post("/stage/order/clothes/iStore/5000")
+        .header(ContentType::JSON)
+        .header(Header::new("Authorization","Basic Zm9vOmJhcg=="))
+        .body(r#"{ "data": "Hello, world!" }"#)
+        .dispatch();
+
+    assert_eq!(response.status(), Status::Ok);
+    assert_eq!(response.body_string(), Some("{\"status\":\"OK\"}".into()));
 }
