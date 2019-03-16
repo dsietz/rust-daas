@@ -12,9 +12,10 @@
 - [Rust by Example](https://doc.rust-lang.org/rust-by-example/)
 - [The Cargo Book](https://doc.rust-lang.org/cargo/) 
 - [Playground](https://play.rust-lang.org/)
-- [Web Service Testing with Rocket](https://rocket.rs/v0.4/guide/testing)
-- [rocket Crate](https://crates.io/crates/rocket)
-
+>Actix Web framework
+- [Web Service Testing with Actix Web](https://github.com/actix/actix-website/blob/master/content/docs/testing.md)
+- [Actix Web Crate](https://crates.io/crates/actix-web)
+- [Actix Web Homepage](https://actix.rs/)
 
 In order to perform any builds or tests, you first need to be in the package directory where the Cargo.toml file is loacted.
 ```

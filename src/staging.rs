@@ -1,11 +1,15 @@
-use rocket::{Rocket};
-use rocket_contrib::json::{Json, JsonValue};
 use super::*;
+use actix_web::{App, http, HttpRequest, Path, Responder, Result};
 
-#[derive(Serialize, Deserialize, Debug)]
-struct ObjData {
+#[derive(Deserialize)]
+pub struct Params {
+    category: String,
+    subcategory: String,
+    source_name: String,
+    source_uid: usize,
 }
 
+/*
 fn build_db_doc(auth: &str, category: String, subcategory: String, source_name: String, source_uid: String, message: json::JsonValue) -> Result<json::JsonValue, String>{
     match get_author(auth) {
         Some(auth) => {
@@ -25,26 +29,30 @@ fn build_db_doc(auth: &str, category: String, subcategory: String, source_name: 
         None => Err("Warning: Could not extract author from Authorization header.".to_string())
     }
 }
+*/
 
-#[get("/")]
-fn index() -> &'static str {
-    "Hello World!"
+pub fn index(req: &HttpRequest) -> impl Responder {
+    "Hello World!".to_string()
 }
 
-#[post("/stage/<category>/<subcategory>/<source_name>/<source_uid>", format = "json", data = "<message>")]
-fn stage(auth: HdrBase64, category: String, subcategory: String, source_name: String, source_uid: String, message: String) -> JsonValue {
-    //let dat = json::parse(message.data.as_str().unwrap()).unwrap();
-    //let doc = build_db_doc(&auth.0, category, subcategory, source_name, source_uid, json::parse(&message.data).unwrap()).unwrap();
-    let doc = &message;
-    println!("DOCUMENT: {:?}", doc);
-    json!({"status": "OK"})
+pub fn stage(params: Path<Params>) -> Result<String> {
+    //let doc = &message;
+    Ok(format!("PARAMETERS: {}, {}, {}, {} ...", params.category, params.subcategory, params.source_name, params.source_uid))
+    //json!({"status": "OK"})
 }
 
-pub fn service() -> Rocket {
-    rocket::ignite().mount("/", routes![index, stage])
+pub fn service() -> App {
+    let app = App::new()
+                .resource(
+                    "/", 
+                    |r| r.method(http::Method::GET).f(index))
+                .resource(
+                    "/{category}/{subcategory}/{source_name}/{source_uid}",
+                    |r| r.method(http::Method::GET).with(stage));
+    app
 }
 
-
+/*
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -72,3 +80,4 @@ mod tests {
         assert_eq!(db_doc, baseline);
     }
 }
+*/
