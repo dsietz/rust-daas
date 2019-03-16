@@ -2,9 +2,8 @@ use rocket::{Rocket};
 use rocket_contrib::json::{Json, JsonValue};
 use super::*;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct ObjData {
-    data: JsonValue
 }
 
 fn build_db_doc(auth: &str, category: String, subcategory: String, source_name: String, source_uid: String, message: json::JsonValue) -> Result<json::JsonValue, String>{
@@ -33,10 +32,11 @@ fn index() -> &'static str {
 }
 
 #[post("/stage/<category>/<subcategory>/<source_name>/<source_uid>", format = "json", data = "<message>")]
-fn stage(auth: HdrBase64, category: String, subcategory: String, source_name: String, source_uid: String, message: Json<ObjData>) -> JsonValue {
+fn stage(auth: HdrBase64, category: String, subcategory: String, source_name: String, source_uid: String, message: String) -> JsonValue {
     //let dat = json::parse(message.data.as_str().unwrap()).unwrap();
-    let doc = build_db_doc(&auth.0, category, subcategory, source_name, source_uid, message.data).unwrap();
-    println!("DOCUMENT: {}", doc);
+    //let doc = build_db_doc(&auth.0, category, subcategory, source_name, source_uid, json::parse(&message.data).unwrap()).unwrap();
+    let doc = &message;
+    println!("DOCUMENT: {:?}", doc);
     json!({"status": "OK"})
 }
 

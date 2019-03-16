@@ -11,6 +11,7 @@
 - [The Rust Book](https://doc.rust-lang.org/1.30.0/book/second-edition/)
 - [Rust by Example](https://doc.rust-lang.org/rust-by-example/)
 - [The Cargo Book](https://doc.rust-lang.org/cargo/) 
+- [Playground](https://play.rust-lang.org/)
 - [Web Service Testing with Rocket](https://rocket.rs/v0.4/guide/testing)
 - [rocket Crate](https://crates.io/crates/rocket)
 

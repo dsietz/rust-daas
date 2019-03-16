@@ -42,6 +42,18 @@ fn test_stage_data_bad_json(){
 }
 
 #[test]
+fn test_stage_data_missing_data(){
+    let client = Client::new(staging::service()).expect("valid rocket instance");
+    let response = client.post("/stage/order/clothes/iStore/5000")
+        .header(ContentType::JSON)
+        .header(Header::new("Authorization","Basic Zm9vOmJhcg=="))
+        .body(r#"{ "created_timestamp": 1552681300 }"#)
+        .dispatch();
+
+    assert_eq!(response.status(), Status::Ok);
+}
+
+#[test]
 fn test_stage_data_auth_ok(){
     let client = Client::new(staging::service()).expect("valid rocket instance");
     let mut response = client.post("/stage/order/clothes/iStore/5000")
