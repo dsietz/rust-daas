@@ -18,16 +18,16 @@ fn test_status_code_ok() {
     let bytes = srv.execute(response.body()).unwrap();
     assert_eq!(bytes, Bytes::from_static("Hello World!".as_ref()));
 }
-/*
+
 #[test]
 fn test_stage_data_ok(){
-    let mut srv =actix_web::test::TestServer::new(|app| app.handler(staging::stage));
+    let mut srv =actix_web::test::TestServer::new(|app| app.handler(staging::index));
     let request = srv.get()
                     .uri(srv.url("/stage/order/clothes/iStore/5000").as_str())
                     .header(header::CONTENT_TYPE, "application/json")
                     .header("Authorization","Basic Zm9vOmJhcg==")
                     .body(r#"{ "data": "Hello, world!" }"#)
-                    .finish().unwrap();
+                    .unwrap();
     let response = srv.execute(request.send()).unwrap();
     
     assert!(response.status().is_success());
@@ -36,7 +36,7 @@ fn test_stage_data_ok(){
     let bytes = srv.execute(response.body()).unwrap();
     assert_eq!(bytes, Bytes::from_static("{\"status\":\"OK\"}".as_ref()));
 }
-*/
+
 /*
 #[test]
 fn test_stage_data_bad_json(){

@@ -35,10 +35,12 @@ pub fn index(req: &HttpRequest) -> impl Responder {
     "Hello World!".to_string()
 }
 
-pub fn stage(params: Path<Params>) -> Result<String> {
-    //let doc = &message;
-    Ok(format!("PARAMETERS: {}, {}, {}, {} ...", params.category, params.subcategory, params.source_name, params.source_uid))
-    //json!({"status": "OK"})
+//https://docs.rs/actix-web-httpauth/0.1.0/actix_web_httpauth/headers/authorization/struct.Authorization.html
+pub fn stage(req: &HttpRequest) -> Result<String> {
+    //Ok(format!("PARAMETERS: {}, {}, {}, {} ...", params.category, params.subcategory, params.source_name, params.source_uid))
+    let cat: String = req.match_info().query("category")?;
+    println!("{}",cat);
+    Ok("{\"status\": \"OK\"}".to_string())
 }
 
 pub fn service() -> App {
@@ -48,7 +50,7 @@ pub fn service() -> App {
                     |r| r.method(http::Method::GET).f(index))
                 .resource(
                     "/{category}/{subcategory}/{source_name}/{source_uid}",
-                    |r| r.method(http::Method::GET).with(stage));
+                    |r| r.method(http::Method::GET).f(stage));
     app
 }
 
