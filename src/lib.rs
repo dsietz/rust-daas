@@ -1,11 +1,16 @@
 #[macro_use] extern crate serde_derive;
-extern crate json;
+#[macro_use] extern crate json;
 extern crate base64;
 extern crate actix_web;
 
 use std::str;
 use std::time::{SystemTime};
 use base64::{decode};
+
+
+/// globals
+static VER: &str = "v1";
+
 
 /// methods
 pub fn get_author(auth: &str) -> Option<String>{
@@ -18,7 +23,7 @@ pub fn get_author(auth: &str) -> Option<String>{
                     let decoded = str::from_utf8(&decoded).unwrap().to_string();
                     let parts: Vec<&str> = decoded.split(':').collect();
 
-                    Some(parts[1].to_string())
+                    Some(parts[0].to_string())
                 },
                 Err(_err) => {
                     //panic!("Warning: Bad encoded Authorization Header value: {}", encoded)
@@ -45,6 +50,8 @@ fn is_valid_auth(auth: &str) -> bool {
 //pub mod contract;
 pub mod staging;
 
+
+//tests
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -63,7 +70,7 @@ mod tests {
     fn test_get_author_ok() {
         let author = get_author("Basic Zm9vOmJhcg==");
         assert!(author.is_some());
-        assert_eq!(author.unwrap(), "bar");
+        assert_eq!(author.unwrap(), "foo");
     }
 
     #[test]
