@@ -1,6 +1,6 @@
 extern crate actix_web;
 extern crate bytes;
-#[macro_use] extern crate json;
+extern crate json;
 
 use daas::staging;
 use actix_web::*;
@@ -25,7 +25,7 @@ fn test_status_code_ok() {
 fn test_stage_data_ok(){
     let mut srv =actix_web::test::TestServer::new(|app| app.handler(staging::stage));
     let request = srv.get()
-                    .uri(srv.url("/stage/order/clothing/iStore/5000").as_str())
+                    .uri(srv.url("/stage/v1/order/clothing/iStore/5000").as_str())
                     .header(header::CONTENT_TYPE, "application/json")
                     .header("Authorization","Basic Zm9vOmJhcg==")
                     .json("{\"data\":\"Hello, world!\"}")

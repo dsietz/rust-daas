@@ -1,6 +1,7 @@
 use super::*;
-use actix_web::{App, http, HttpRequest, Path, Responder, Result};
+use actix_web::{App, http, HttpRequest, Responder, Result};
 
+/*
 #[derive(Deserialize)]
 pub struct Params {
     category: String,
@@ -8,7 +9,7 @@ pub struct Params {
     source_name: String,
     source_uid: usize,
 }
-
+*/
 fn build_db_doc(auth: &str, category: String, subcategory: String, source_name: String, source_uid: usize, message: json::JsonValue) -> Result<json::JsonValue, String>{
     match get_author(auth) {
         Some(auth) => {
@@ -93,7 +94,7 @@ mod tests {
     }
 
     #[test]
-    fn test_get_service_rrot() {
+    fn test_get_service_root() {
         assert_eq!(get_service_root(), format!("/stage/{}", VER));
     }
 }

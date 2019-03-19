@@ -3,7 +3,7 @@ os: linux
 language: rust
 cache: cargo
 rust:
-  - nightly
+  - stable
 before_script:
   - |
       export PATH=$HOME/.local/bin:$PATH   

@@ -2,6 +2,9 @@
 #[macro_use] extern crate json;
 extern crate base64;
 extern crate actix_web;
+extern crate roadrunner;
+extern crate tokio_core;
+extern crate hyper;
 
 use std::str;
 use std::time::{SystemTime};
@@ -48,7 +51,9 @@ fn is_valid_auth(auth: &str) -> bool {
 
 
 //pub mod contract;
+pub mod couchdb;
 pub mod staging;
+
 
 
 //tests
