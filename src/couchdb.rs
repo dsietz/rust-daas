@@ -4,6 +4,7 @@ use base64::{encode, decode};
 use roadrunner::RestClient;
 use roadrunner::RestClientMethods;
 use hyper::{StatusCode};
+use serde_json::value::{Value};
 
 pub struct CouchDB{
     auth_basic: String,
@@ -22,6 +23,7 @@ impl CouchDB {
         }
     }
 
+    //this function doesn't work and setup needs to be done manually
     pub fn cluster_setup(&self) -> Result<StatusCode, String> {
         let mut core = tokio_core::reactor::Core::new().unwrap();
         let data = format!(r#"{{"action":"enable_single_node", "bind_address":"0.0.0.0", "password":"{}", "port":"5984", "singlenode":"true", "username":"{}"}}"#,self.get_password(),self.get_username());
@@ -53,10 +55,6 @@ impl CouchDB {
         base_url.to_owned()
     }
 
-    pub fn get_host(&self) -> &str {
-        &self.host
-    }
-
     fn get_base64_part(&self, idx: usize) -> Option<String> {
         match decode(&self.auth_basic) {
             Ok(decoded) => {
@@ -70,6 +68,28 @@ impl CouchDB {
                  None
             }
         }
+    }
+
+    pub fn get_doc_by_id(&self, db: String, doc_id: String) -> Result<Value, String>{
+        let mut core = tokio_core::reactor::Core::new().unwrap();
+        let response = RestClient::get(&format!("{}/{}/{}",self.get_base_url(), db, doc_id))
+            .authorization_basic(self.get_username(), self.get_password())
+            .execute_on(&mut core)
+            .unwrap();
+
+        match response.status() {
+            StatusCode::Ok => {
+                println!("GET DOC RESPONSE: {}",response.content().as_value().unwrap());
+                Ok(response.content().as_value().unwrap())
+            },
+            _ => Err(format!("Wrong status code. Status {} was returned.",response.status())),
+        }
+
+        
+    } 
+
+    pub fn get_host(&self) -> &str {
+        &self.host
     }
 
     pub fn get_password(&self) -> String {
@@ -129,13 +149,25 @@ mod tests {
     #[test]
     fn test_create_db_201() {
         let couch = CouchDB::new("admin".to_string(), "password".to_string());
-        assert_eq!(couch.create_db("test".to_string()).unwrap(), StatusCode::Created);
+
+        match couch.create_db("test".to_string()).unwrap() {
+            StatusCode::Created => assert!(true),
+            StatusCode::PreconditionFailed => assert!(true),
+            _ => assert!(false)
+        }
     }
 
     #[test]
     fn test_create_db_401() {
         let couch = CouchDB::new("foo".to_string(), "bar".to_string());
         assert_eq!(couch.create_db("test2".to_string()).unwrap(), StatusCode::Unauthorized);
+    }
+
+    #[test]
+    fn test_get_doc_by_id_200() {
+        let couch = CouchDB::new("admin".to_string(), "password".to_string());
+        let doc = couch.get_doc_by_id("test".to_string(),"12345".to_string()).unwrap();
+        assert_eq!(doc.get("_id").unwrap().as_str().unwrap(), "12345");
     }
 
     #[test]

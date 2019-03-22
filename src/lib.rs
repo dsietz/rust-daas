@@ -1,4 +1,5 @@
 #[macro_use] extern crate serde_derive;
+#[macro_use] extern crate serde_json;
 #[macro_use] extern crate json;
 extern crate base64;
 extern crate actix_web;
