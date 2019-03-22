@@ -6,6 +6,7 @@ extern crate actix_web;
 extern crate roadrunner;
 extern crate tokio_core;
 extern crate hyper;
+extern crate rand;
 
 use std::str;
 use std::time::{SystemTime};
@@ -50,12 +51,9 @@ fn is_valid_auth(auth: &str) -> bool {
     auth.contains("Basic ")
 }
 
-
-//pub mod contract;
+pub mod daas;
 pub mod couchdb;
 pub mod staging;
-
-
 
 //tests
 #[cfg(test)]

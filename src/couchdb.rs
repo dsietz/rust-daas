@@ -1,10 +1,10 @@
 use std::str;
-use std::io::{stdout, Write};
 use base64::{encode, decode};
 use roadrunner::RestClient;
 use roadrunner::RestClientMethods;
 use hyper::{StatusCode};
 use serde_json::value::{Value};
+use super::daas::{DaaSDoc};
 
 pub struct CouchDB{
     auth_basic: String,
@@ -46,6 +46,26 @@ impl CouchDB {
         Ok(*response.status())
     } 
 
+    pub fn create_doc(&self, db: String, mut doc: DaaSDoc) -> Result<Value, String>{
+        let json_doc = doc.serialize_without_rev();
+        let mut core = tokio_core::reactor::Core::new().unwrap();
+        let response = RestClient::post(&format!("{}/{}",self.get_base_url(), db))
+            .authorization_basic(self.get_username(), self.get_password())
+            .json_body_str(json_doc)
+            .execute_on(&mut core)
+            .unwrap();
+
+        match response.status() {
+            StatusCode::Created => {
+                Ok(response.content().as_value().unwrap())
+            },
+            _ => {
+                println!("{}",response.content().as_ref_string());
+                Err(format!("Wrong status code. Status {} was returned.",response.status()))
+            },
+        }
+    }     
+
     pub fn get_auth(&self) -> &str {
         &self.auth_basic
     }
@@ -70,7 +90,7 @@ impl CouchDB {
         }
     }
 
-    pub fn get_doc_by_id(&self, db: String, doc_id: String) -> Result<Value, String>{
+    pub fn get_doc_by_id(&self, db: String, doc_id: String) -> Result<DaaSDoc, String>{
         let mut core = tokio_core::reactor::Core::new().unwrap();
         let response = RestClient::get(&format!("{}/{}/{}",self.get_base_url(), db, doc_id))
             .authorization_basic(self.get_username(), self.get_password())
@@ -79,13 +99,10 @@ impl CouchDB {
 
         match response.status() {
             StatusCode::Ok => {
-                println!("GET DOC RESPONSE: {}",response.content().as_value().unwrap());
-                Ok(response.content().as_value().unwrap())
+                Ok(DaaSDoc::from_serialized(response.content().as_ref_string()))
             },
             _ => Err(format!("Wrong status code. Status {} was returned.",response.status())),
         }
-
-        
     } 
 
     pub fn get_host(&self) -> &str {
@@ -124,11 +141,48 @@ impl CouchDB {
         self.proto = proto;
         true
     }
+
+    pub fn update_doc(&self, db: String, mut doc: DaaSDoc) -> Result<Value, String>{
+        let json_doc = doc.serialize();
+        let mut core = tokio_core::reactor::Core::new().unwrap();
+        let response = RestClient::put(&format!("{}/{}/{}",self.get_base_url(), db, doc._id))
+            .authorization_basic(self.get_username(), self.get_password())
+            .json_body_str(json_doc)
+            .execute_on(&mut core)
+            .unwrap();
+
+        match response.status() {
+            StatusCode::Created => {
+                Ok(response.content().as_value().unwrap())
+            },
+            _ => {
+                println!("{}",response.content().as_ref_string());
+                Err(format!("Wrong status code. Status {} was returned.",response.status()))
+            },
+        }
+    } 
+
+    pub fn upsert_doc(&self, db: String, mut doc: DaaSDoc) -> Result<Value, String>{
+        match self.get_doc_by_id(db.clone(), doc._id.clone()) {
+            // exsisting document
+            Ok(found) => {
+                // add (or overwrite) the _rev to the doc
+                doc._rev = found._rev;
+                self.update_doc(db, doc)
+            },
+            // new document
+            Err(_e) => {
+                self.create_doc(db, doc)
+            },
+        }
+    }     
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::time::{SystemTime, UNIX_EPOCH};
+    use rand::Rng;
 
     #[test]
     fn test_couchdb_new() {
@@ -164,11 +218,51 @@ mod tests {
     }
 
     #[test]
+    fn test_create_doc_200() {
+        let couch = CouchDB::new("admin".to_string(), "password".to_string());
+        let src = "iStore".to_string();
+        let mut rng = rand::thread_rng();
+        let uid: usize = rng.gen_range(0, 1000000);
+        let cat = "order".to_string();
+        let sub = "clothing".to_string();
+        let data = json!({
+            "status": "new"
+        });
+        let doc = DaaSDoc::new(src, uid, cat, sub, data);
+        let rslt = couch.create_doc("test".to_string(),doc);
+               
+        match rslt {
+            Ok(_v) => {
+                assert!(true);
+            },
+            Err(e) => {
+                println!("Failed: {}",e);
+                assert!(false);
+            }
+        }
+    }    
+
+    #[test]
     fn test_get_doc_by_id_200() {
         let couch = CouchDB::new("admin".to_string(), "password".to_string());
-        let doc = couch.get_doc_by_id("test".to_string(),"12345".to_string()).unwrap();
-        assert_eq!(doc.get("_id").unwrap().as_str().unwrap(), "12345");
+        
+        match couch.get_doc_by_id("test".to_string(),"12345".to_string()) {
+            Ok(doc) => {
+                assert_eq!(doc._id, "12345".to_string())
+            },
+            Err(_e) => assert!(false)
+        }
     }
+
+    #[test]
+    fn test_get_doc_by_id_404() {
+        let couch = CouchDB::new("admin".to_string(), "password".to_string());
+        
+        match couch.get_doc_by_id("test".to_string(),"bad-id".to_string()) {
+            Ok(_v) => assert!(false),
+            Err(_e) => assert!(true)
+        }
+    }    
 
     #[test]
     fn test_get_password() {
@@ -202,4 +296,107 @@ mod tests {
         assert!(couch.set_protocol("https".to_string()));
         assert_eq!(couch.get_protocol(), "https".to_string());
     }
+
+    #[test]
+    fn test_update_doc_200() {
+        let couch = CouchDB::new("admin".to_string(), "password".to_string());
+        let mut before = couch.get_doc_by_id("test".to_string(),"12345".to_string()).unwrap();
+        let old_uid = before.source_uid.clone();
+        let _rev = before._rev.clone().unwrap();
+        let new_src_uid: usize = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() as usize;
+        before.source_uid = new_src_uid;
+
+        match couch.update_doc("test".to_string(), before) {
+            Ok(_doc) => {
+                match couch.get_doc_by_id("test".to_string(),"12345".to_string()) {
+                    Ok(after) => assert_ne!(old_uid, after.source_uid),
+                    _ => assert!(false)
+                }
+            },
+            Err(_e) => assert!(false)
+        }
+    }   
+
+    #[test]
+    fn test_upsert_new_doc_200() {
+        // create a new document
+        let couch = CouchDB::new("admin".to_string(), "password".to_string());
+        let src = "iStore".to_string();
+        let mut rng = rand::thread_rng();
+        let uid: usize = rng.gen_range(0, 1000000);
+        let cat = "order".to_string();
+        let sub = "clothing".to_string();
+        let data = json!({
+            "status": "new"
+        });
+        let doc = DaaSDoc::new(src, uid, cat, sub, data);
+        let rslt = couch.upsert_doc("test".to_string(),doc);
+               
+        match rslt {
+            Ok(_v) => {
+                assert!(true);
+            },
+            Err(e) => {
+                println!("Failed: {}",e);
+                assert!(false);
+            }
+        }
+    }    
+
+    #[test]
+    fn test_upsert_existing_doc_200() {
+        let couch = CouchDB::new("admin".to_string(), "password".to_string());
+        let mut before = couch.get_doc_by_id("test".to_string(),"upsert_existing_doc".to_string()).unwrap();
+        let old_uid = before.source_uid.clone();
+        let new_src_uid: usize = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() as usize;
+        before.source_uid = new_src_uid;
+
+        match couch.upsert_doc("test".to_string(), before) {
+            Ok(_doc) => {
+                match couch.get_doc_by_id("test".to_string(),"upsert_existing_doc".to_string()) {
+                    Ok(after) => assert_ne!(old_uid, after.source_uid),
+                    _ => assert!(false)
+                }
+            },
+            Err(_e) => assert!(false)
+        }
+    }      
+
+    #[test]
+    fn test_upsert_existing_doc_without_rev_200() {
+        // create a new document
+        let couch = CouchDB::new("admin".to_string(), "password".to_string());
+        let db = "test".to_string();
+        let src = "iStore".to_string();
+        let mut rng = rand::thread_rng();
+        let uid: usize = rng.gen_range(0, 1000000);
+        let cat = "order".to_string();
+        let sub = "clothing".to_string();
+        let data = json!({
+            "status": "new"
+        });
+        let doc = DaaSDoc::new(src.clone(), uid.clone(), cat.clone(), sub.clone(), data.clone());
+
+        match couch.create_doc(db.clone(), doc) {
+            Ok(rslt) => {
+                let updt_doc = DaaSDoc::new(src, 6000, cat, sub, data);
+                let doc_id = updt_doc._id.clone();
+
+                match couch.upsert_doc(db.clone(), updt_doc) {
+                    Ok(_v) => {
+                        let after = couch.get_doc_by_id(db.clone(), doc_id).unwrap();
+                        assert_eq!(6000, after.source_uid);
+                    },
+                    Err(e) => {
+                        println!("Failed: {}",e);
+                        assert!(false);
+                    }
+                }
+            },
+            Err(e) => {
+                println!("Failed: {}",e);
+                assert!(false);
+            }
+        }
+    }             
 }
