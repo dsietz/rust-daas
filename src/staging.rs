@@ -1,5 +1,5 @@
 use super::*;
-use actix_web::{App, http, HttpMessage, HttpRequest, Responder, Result};
+use actix_web::{App, http, HttpMessage, HttpRequest, Json, Responder, Result};
 use super::daas::DaaSDoc;
 use super::couchdb::{CouchDB};
 use std::thread;
@@ -18,7 +18,8 @@ pub fn stage(req: &HttpRequest) -> Result<String> {
     let subcat: String = req.match_info().query("subcategory")?;
     let srcnme: String = req.match_info().query("source_name")?;
     let srcuid: usize = req.match_info().query("source_uid")?;
-    println!("{:?}", req.payload());
+    
+    println!("{:?}", req);
     
     let data = json!({
         "quantitiy":1,
