@@ -19,7 +19,7 @@ fn test_status_code_ok() {
     let bytes = srv.execute(response.body()).unwrap();
     assert_eq!(bytes, Bytes::from_static("Hello World!".as_ref()));
 }
-
+/*
 #[ignore]
 #[test]
 fn test_stage_data_ok(){
@@ -39,6 +39,7 @@ fn test_stage_data_ok(){
     let bytes = srv.execute(response.body()).unwrap();
     assert_eq!(bytes, Bytes::from_static("{\"status\":\"OK\"}".as_ref()));
 }
+*/
 
 /*
 #[test]

@@ -1,12 +1,13 @@
 #[macro_use] extern crate serde_derive;
 #[macro_use] extern crate serde_json;
-#[macro_use] extern crate json;
+extern crate json;
 extern crate base64;
 extern crate actix_web;
 extern crate roadrunner;
 extern crate tokio_core;
 extern crate hyper;
 extern crate rand;
+extern crate futures;
 
 use std::str;
 use std::time::{SystemTime};

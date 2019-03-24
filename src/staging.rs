@@ -1,51 +1,73 @@
 use super::*;
-use actix_web::{App, http, HttpMessage, HttpRequest, Json, Responder, Result};
+use actix_web::{App, http, HttpRequest, HttpResponse, Path, Responder};
 use super::daas::DaaSDoc;
 use super::couchdb::{CouchDB};
 use std::thread;
+
+#[derive(Deserialize)]
+pub struct Info {
+    category: String,
+    subcategory: String,
+    source_name: String,
+    source_uid: usize,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct Bdy {
+    quantitiy: usize,
+    status: String,
+}
 
 pub fn get_service_root() -> String {
     format!("/stage/{}", VER)
 }
 
-pub fn index(req: &HttpRequest) -> impl Responder {
+pub fn index(_req: &HttpRequest) -> impl Responder {
     "Hello World!".to_string()
 }
 
 //https://docs.rs/actix-web-httpauth/0.1.0/actix_web_httpauth/headers/authorization/struct.Authorization.html
-pub fn stage(req: &HttpRequest) -> Result<String> {
-    let cat: String = req.match_info().query("category")?;
-    let subcat: String = req.match_info().query("subcategory")?;
-    let srcnme: String = req.match_info().query("source_name")?;
-    let srcuid: usize = req.match_info().query("source_uid")?;
-    
-    println!("{:?}", req);
-    
-    let data = json!({
-        "quantitiy":1,
-        "status": "new"
-    });
-    
+pub fn stage(params: Path<Info>, body: String) -> HttpResponse {
+    let cat: String = params.category.clone();
+    let subcat: String = params.subcategory.clone();
+    let srcnme: String = params.source_name.clone();
+    let srcuid: usize = params.source_uid;
+
+    let data = match serde_json::from_str(&body) {
+        Ok(d) => d,
+        _ => {
+            return HttpResponse::BadRequest()
+                .header(http::header::CONTENT_TYPE, "application/json")
+                .body(r#"{"error":"Bad Json"}"#) 
+        },
+    };
+
     let doc = DaaSDoc::new(srcnme, srcuid, cat, subcat, data);
     let couch = CouchDB::new("admin".to_string(), "password".to_string());
-
     let save = thread::spawn(move || {
             match couch.upsert_doc("test".to_string(),doc) {
-                Ok(rslt) => Ok("{\"status\":\"OK\"}".to_string()),
-                _ => Ok("{\"status\":\"ERROR\"}".to_string()),
+                Ok(_rslt) => {
+                    r#"{"status":"OK"}"#
+                },
+                _ => {
+                    r#"{"error":"Cloud not save document!"}"#
+                },
             }
         });
-    save.join().unwrap()
+    
+    HttpResponse::Ok()
+        .header(http::header::CONTENT_TYPE, "application/json")
+        .body(save.join().unwrap())    
 }
 
 pub fn service() -> App {
     let app = App::new()
                 .resource(
                     "/", 
-                    |r| r.method(http::Method::GET).f(index))
+                    |r| r.get().f(index))
                 .resource(
                     &(get_service_root() + "/{category}/{subcategory}/{source_name}/{source_uid}"),
-                    |r| r.method(http::Method::POST).f(stage));
+                    |r| r.post().with(stage));
     app
 }
 
