@@ -10,6 +10,7 @@ pub struct DaaSDoc{
     pub source_uid: usize,
     pub category: String,
     pub subcategory: String,
+    pub author: String,
     pub data_obj: Value,
 }
 
@@ -20,11 +21,12 @@ struct DaaSDocNoRev{
     pub source_uid: usize,
     pub category: String,
     pub subcategory: String,
+    pub author: String,
     pub data_obj: Value,
 }
 
 impl DaaSDoc {
-    pub fn new(src_name: String, src_uid: usize, cat: String, subcat: String, data: Value) -> DaaSDoc {
+    pub fn new(src_name: String, src_uid: usize, cat: String, subcat: String, auth: String, data: Value) -> DaaSDoc {
         let id = format!("{}{}{}{}{}{}{}",cat, DELIMITER, subcat, DELIMITER, src_name, DELIMITER, src_uid).to_string();
         DaaSDoc{
             _id: id,
@@ -33,6 +35,7 @@ impl DaaSDoc {
             source_uid: src_uid,
             category: cat,
             subcategory: subcat,
+            author: auth,
             data_obj: data,
         }
     }
@@ -52,6 +55,7 @@ impl DaaSDoc {
             source_uid: self.source_uid.clone(),
             category: self.category.clone(),
             subcategory: self.subcategory.clone(),
+            author: self.author.clone(),
             data_obj: self.data_obj.clone(),
         };
 
@@ -71,10 +75,11 @@ mod tests {
         let uid = 5000;
         let cat = "order".to_string();
         let sub = "clothing".to_string();
+        let auth = "istore_app".to_string();
         let data = json!({
             "status": "new"
         });
-        let _doc = DaaSDoc::new(src, uid, cat, sub, data);
+        let _doc = DaaSDoc::new(src, uid, cat, sub, auth, data);
         
         assert!(true);
     }
@@ -85,11 +90,12 @@ mod tests {
         let uid = 5000;
         let cat = "order".to_string();
         let sub = "clothing".to_string();
+        let auth = "istore_app".to_string();
         let id = format!("{}|{}|{}|{}",cat, sub, src, uid).to_string();
         let data = json!({
             "status": "new"
         });
-        let doc = DaaSDoc::new(src, uid, cat, sub, data);
+        let doc = DaaSDoc::new(src, uid, cat, sub, auth, data);
         
         assert_eq!(doc._id, id);
     }
@@ -100,10 +106,11 @@ mod tests {
         let uid = 5000;
         let cat = "order".to_string();
         let sub = "clothing".to_string();
+        let auth = "istore_app".to_string();
         let data = json!({
             "status": "new"
         });
-        let doc = DaaSDoc::new(src, uid, cat, sub, data);
+        let doc = DaaSDoc::new(src, uid, cat, sub, auth, data);
         
         assert!(doc._rev.is_none());
     }
@@ -114,10 +121,11 @@ mod tests {
         let uid = 5000;
         let cat = "order".to_string();
         let sub = "clothing".to_string();
+        let auth = "istore_app".to_string();
         let data = json!({
             "status": "new"
         });
-        let doc = DaaSDoc::new(src.clone(), uid, cat.clone(), sub.clone(), data);
+        let doc = DaaSDoc::new(src.clone(), uid, cat.clone(), sub.clone(), auth.clone(), data);
         
         assert_eq!(doc.source_name, src);
         assert_eq!(doc.source_uid, uid);
@@ -131,10 +139,11 @@ mod tests {
         let uid = 5000;
         let cat = "order".to_string();
         let sub = "clothing".to_string();
+        let auth = "istore_app".to_string();
         let data = json!({
             "status": "new"
         });
-        let doc = DaaSDoc::new(src.clone(), uid, cat.clone(), sub.clone(), data);
+        let doc = DaaSDoc::new(src.clone(), uid, cat.clone(), sub.clone(), auth.clone(), data);
         
         assert_eq!(doc.data_obj.get("status").unwrap(), "new");
     }     
@@ -145,8 +154,9 @@ mod tests {
         let uid = 5000;
         let cat = "order".to_string();
         let sub = "clothing".to_string();
+        let auth = "istore_app".to_string();
         let id = format!("{}|{}|{}|{}",cat, sub, src, uid).to_string();
-        let serialized = r#"{"_id":"order|clothing|iStore|5000","_rev":null,"source_name":"iStore","source_uid":5000,"category":"order","subcategory":"clothing","data_obj":{"status":"new"}}"#;
+        let serialized = r#"{"_id":"order|clothing|iStore|5000","_rev":null,"source_name":"iStore","source_uid":5000,"category":"order","subcategory":"clothing","author":"istore_app","data_obj":{"status":"new"}}"#;
         let doc = DaaSDoc::from_serialized(&serialized);
   	
         assert_eq!(doc._id, id);
@@ -155,6 +165,7 @@ mod tests {
         assert_eq!(doc.source_uid, uid);
         assert_eq!(doc.category, cat);
         assert_eq!(doc.subcategory, sub);
+        assert_eq!(doc.author, auth);
 		assert_eq!(doc.data_obj.get("status").unwrap(), "new");
     }         
 
@@ -164,12 +175,13 @@ mod tests {
         let uid = 5000;
         let cat = "order".to_string();
         let sub = "clothing".to_string();
+        let auth = "istore_app".to_string();
         let data = json!({
             "status": "new"
         });
-        let mut doc = DaaSDoc::new(src.clone(), uid, cat.clone(), sub.clone(), data);
+        let mut doc = DaaSDoc::new(src.clone(), uid, cat.clone(), sub.clone(), auth, data);
 
-        let serialized = r#"{"_id":"order|clothing|iStore|5000","_rev":null,"source_name":"iStore","source_uid":5000,"category":"order","subcategory":"clothing","data_obj":{"status":"new"}}"#;
+        let serialized = r#"{"_id":"order|clothing|iStore|5000","_rev":null,"source_name":"iStore","source_uid":5000,"category":"order","subcategory":"clothing","author":"istore_app","data_obj":{"status":"new"}}"#;
     	
 		assert_eq!(doc.serialize(), serialized);
     }    
@@ -180,11 +192,12 @@ mod tests {
         let uid = 5000;
         let cat = "order".to_string();
         let sub = "clothing".to_string();
+        let auth = "istore_app".to_string();
         let data = json!({
             "status": "new"
         });
-        let mut doc = DaaSDoc::new(src.clone(), uid, cat.clone(), sub.clone(), data);
-        let no_rev = r#"{"_id":"order|clothing|iStore|5000","source_name":"iStore","source_uid":5000,"category":"order","subcategory":"clothing","data_obj":{"status":"new"}}"#;
+        let mut doc = DaaSDoc::new(src.clone(), uid, cat.clone(), sub.clone(), auth.clone(), data);
+        let no_rev = r#"{"_id":"order|clothing|iStore|5000","source_name":"iStore","source_uid":5000,"category":"order","subcategory":"clothing","author":"istore_app","data_obj":{"status":"new"}}"#;
 		
         assert_eq!(doc.serialize_without_rev(), no_rev.to_string());
     }   

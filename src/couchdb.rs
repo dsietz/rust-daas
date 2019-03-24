@@ -225,10 +225,11 @@ mod tests {
         let uid: usize = rng.gen_range(0, 1000000);
         let cat = "order".to_string();
         let sub = "clothing".to_string();
+        let auth = "istore_app".to_string();
         let data = json!({
             "status": "new"
         });
-        let doc = DaaSDoc::new(src, uid, cat, sub, data);
+        let doc = DaaSDoc::new(src, uid, cat, sub, auth, data);
         let rslt = couch.create_doc("test".to_string(),doc);
                
         match rslt {
@@ -326,10 +327,11 @@ mod tests {
         let uid: usize = rng.gen_range(0, 1000000);
         let cat = "order".to_string();
         let sub = "clothing".to_string();
+        let auth = "istore_app".to_string();
         let data = json!({
             "status": "new"
         });
-        let doc = DaaSDoc::new(src, uid, cat, sub, data);
+        let doc = DaaSDoc::new(src, uid, cat, sub, auth, data);
         let rslt = couch.upsert_doc("test".to_string(),doc);
                
         match rslt {
@@ -372,14 +374,15 @@ mod tests {
         let uid: usize = rng.gen_range(0, 1000000);
         let cat = "order".to_string();
         let sub = "clothing".to_string();
+        let auth = "istore_app".to_string();
         let data = json!({
             "status": "new"
         });
-        let doc = DaaSDoc::new(src.clone(), uid.clone(), cat.clone(), sub.clone(), data.clone());
+        let doc = DaaSDoc::new(src.clone(), uid.clone(), cat.clone(), sub.clone(), auth.clone(), data.clone());
 
         match couch.create_doc(db.clone(), doc) {
             Ok(rslt) => {
-                let updt_doc = DaaSDoc::new(src, 6000, cat, sub, data);
+                let updt_doc = DaaSDoc::new(src, 6000, cat, sub, auth, data);
                 let doc_id = updt_doc._id.clone();
 
                 match couch.upsert_doc(db.clone(), updt_doc) {

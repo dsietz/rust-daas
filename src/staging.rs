@@ -1,5 +1,7 @@
 use super::*;
-use actix_web::{App, http, HttpRequest, HttpResponse, Path, Responder};
+use actix_web::{App, http, HttpRequest, HttpResponse, Path, Responder, Result};
+use actix_web::http::header::Header;
+use actix_web_httpauth::extractors::basic::BasicAuth;
 use super::daas::DaaSDoc;
 use super::couchdb::{CouchDB};
 use std::thread;
@@ -27,7 +29,7 @@ pub fn index(_req: &HttpRequest) -> impl Responder {
 }
 
 //https://docs.rs/actix-web-httpauth/0.1.0/actix_web_httpauth/headers/authorization/struct.Authorization.html
-pub fn stage(params: Path<Info>, body: String) -> HttpResponse {
+pub fn stage(auth: BasicAuth, params: Path<Info>, body: String, req: HttpRequest) -> HttpResponse {
     let cat: String = params.category.clone();
     let subcat: String = params.subcategory.clone();
     let srcnme: String = params.source_name.clone();
@@ -42,7 +44,7 @@ pub fn stage(params: Path<Info>, body: String) -> HttpResponse {
         },
     };
 
-    let doc = DaaSDoc::new(srcnme, srcuid, cat, subcat, data);
+    let doc = DaaSDoc::new(srcnme, srcuid, cat, subcat, auth.username().to_string(), data);
     let couch = CouchDB::new("admin".to_string(), "password".to_string());
     let save = thread::spawn(move || {
             match couch.upsert_doc("test".to_string(),doc) {
