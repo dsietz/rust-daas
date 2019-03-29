@@ -9,6 +9,7 @@ extern crate hyper;
 extern crate rand;
 extern crate futures;
 extern crate actix_web_httpauth;
+extern crate kafka;
 
 use std::str;
 use std::time::{SystemTime};
@@ -17,7 +18,7 @@ use base64::{decode};
 
 /// globals
 static VER: &str = "v1";
-
+static DELIMITER: &str = "-";
 
 /// methods
 fn get_unix_now() -> u64 {

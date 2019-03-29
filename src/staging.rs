@@ -5,6 +5,9 @@ use actix_web_httpauth::extractors::basic::BasicAuth;
 use super::daas::DaaSDoc;
 use super::couchdb::{CouchDB};
 use std::thread;
+use std::fmt::Write;
+use std::time::Duration;
+use kafka::producer::{Producer, Record, RequiredAcks};
 
 #[derive(Deserialize)]
 pub struct Info {
@@ -33,6 +36,7 @@ pub fn index(_req: &HttpRequest) -> impl Responder {
 }
 
 //https://docs.rs/actix-web-httpauth/0.1.0/actix_web_httpauth/headers/authorization/struct.Authorization.html
+//https://github.com/spicavigo/kafka-rust/issues/135
 pub fn stage(auth: BasicAuth, params: Path<Info>, body: String, req: HttpRequest) -> HttpResponse {
     let cat: String = params.category.clone();
     let subcat: String = params.subcategory.clone();
@@ -48,10 +52,25 @@ pub fn stage(auth: BasicAuth, params: Path<Info>, body: String, req: HttpRequest
         },
     };
 
+    let topic = format!("{}{}{}", cat.clone(), DELIMITER, subcat.clone());
+    let mut client = kafka::client::KafkaClient::new(vec!("localhost:9092".to_owned()));
+    client.load_metadata(&vec![topic.clone()]).unwrap();
+        for top in client.topics().names() {
+        println!("topic: {}", top);
+    }
+    let mut producer = Producer::from_hosts(vec!("localhost:9092".to_owned()))
+        .with_ack_timeout(Duration::from_secs(1))
+        .with_required_acks(RequiredAcks::One)
+        .create()
+        .unwrap();
+
+    producer.send(&Record::from_value(&topic, "message 1".as_bytes())).unwrap();
+
     let doc = DaaSDoc::new(srcnme, srcuid, cat, subcat, auth.username().to_string(), data);
+
     let couch = CouchDB::new("admin".to_string(), "password".to_string());
     let save = thread::spawn(move || {
-            match couch.upsert_doc("test".to_string(),doc) {
+            match couch.upsert_doc("test".to_string(), doc) {
                 Ok(_rslt) => {
                     r#"{"status":"OK"}"#
                 },
