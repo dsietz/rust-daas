@@ -6,6 +6,8 @@ use daas::staging;
 use actix_web::*;
 use http::header;
 use bytes::Bytes;
+use rand::Rng;
+use serde_json::{Value};
 
 #[test]
 fn test_status_code_ok() {
@@ -19,63 +21,83 @@ fn test_status_code_ok() {
     let bytes = srv.execute(response.body()).unwrap();
     assert_eq!(bytes, Bytes::from_static("Hello World!".as_ref()));
 }
-/*
-#[ignore]
+
 #[test]
 fn test_stage_data_ok(){
-    let mut srv =actix_web::test::TestServer::new(|app| app.handler(staging::stage));
-    let request = srv.get()
-                    .uri(srv.url("/stage/v1/order/clothing/iStore/5000").as_str())
+    let uri = daas::staging::get_service_path()
+        .replace("{category}","order")
+        .replace("{subcategory}","clothing")
+        .replace("{source_name}","iStore")
+        .replace("{source_uid}","5000");  
+    let mut srv =actix_web::test::TestServer::new(|app| {
+                        app.resource(
+                            &daas::staging::get_service_path(),
+                            |r| r.post().with(daas::staging::stage)
+                        );
+                    });
+    let request = srv.post()
+                    .uri(srv.url(&uri))
                     .header(header::CONTENT_TYPE, "application/json")
                     .header("Authorization","Basic Zm9vOmJhcg==")
-                    .json("{\"data\":\"Hello, world!\"}")
-                    //.finish()
+                    .body(r#"{"data":"Hello, world!"}"#)
                     .unwrap();
     let response = srv.execute(request.send()).unwrap();
-    println!("STATUS: {}",response.status());
+
     assert!(response.status().is_success());
 
     // read response
     let bytes = srv.execute(response.body()).unwrap();
-    assert_eq!(bytes, Bytes::from_static("{\"status\":\"OK\"}".as_ref()));
-}
-*/
+    let body: Value = serde_json::from_str(&String::from_utf8(bytes.to_vec()).unwrap()).unwrap();
 
-/*
-#[test]
-fn test_stage_data_bad_json(){
-    let client = Client::new(staging::service()).expect("valid rocket instance");
-    let response = client.post("/stage/order/clothes/iStore/5000")
-        .header(ContentType::JSON)
-        .header(Header::new("Authorization","Basic Zm9vOmJhcg=="))
-        .body(r#"{ "data": ... }"#)
-        .dispatch();
-
-    assert_eq!(response.status(), Status::BadRequest);
+    assert_eq!(body["status"], "OK".to_string());
 }
+
 
 #[test]
-fn test_stage_data_missing_data(){
-    let client = Client::new(staging::service()).expect("valid rocket instance");
-    let response = client.post("/stage/order/clothes/iStore/5000")
-        .header(ContentType::JSON)
-        .header(Header::new("Authorization","Basic Zm9vOmJhcg=="))
-        .body(r#"{ "created_timestamp": 1552681300 }"#)
-        .dispatch();
+fn test_stage_data_bad_parameter(){
+let uri = daas::staging::get_service_path()
+        .replace("{category}","order")
+        .replace("{subcategory}","clothing")
+        .replace("{source_name}","iStore")
+        .replace("{source_uid}","word");  
+    let mut srv =actix_web::test::TestServer::new(|app| {
+                        app.resource(
+                            &daas::staging::get_service_path(),
+                            |r| r.post().with(daas::staging::stage)
+                        );
+                    });
+    let request = srv.post()
+                    .uri(srv.url(&uri))
+                    .header(header::CONTENT_TYPE, "application/json")
+                    .header("Authorization","Basic Zm9vOmJhcg==")
+                    .body(r#"{"data":"Hello, world!"}"#)
+                    .unwrap();
+    let response = srv.execute(request.send()).unwrap();
 
-    assert_eq!(response.status(), Status::Ok);
+    assert_eq!(response.status(), http::StatusCode::NOT_FOUND);
 }
 
 #[test]
-fn test_stage_data_auth_ok(){
-    let client = Client::new(staging::service()).expect("valid rocket instance");
-    let mut response = client.post("/stage/order/clothes/iStore/5000")
-        .header(ContentType::JSON)
-        .header(Header::new("Authorization","Basic Zm9vOmJhcg=="))
-        .body(r#"{ "data": "Hello, world!" }"#)
-        .dispatch();
+fn test_stage_data_bad_payload(){
+    let mut rng = rand::thread_rng();
+    let uri = daas::staging::get_service_path()
+        .replace("{category}","order")
+        .replace("{subcategory}","clothing")
+        .replace("{source_name}","iStore")
+        .replace("{source_uid}", "112233");  
+    let mut srv =actix_web::test::TestServer::new(|app| {
+                        app.resource(
+                            &daas::staging::get_service_path(),
+                            |r| r.post().with(daas::staging::stage)
+                        );
+                    });
+    let request = srv.post()
+                    .uri(srv.url(&uri))
+                    .header(header::CONTENT_TYPE, "application/json")
+                    .header("Authorization","Basic Zm9vOmJhcg==")
+                    .body(r#"{"data":...}"#)
+                    .unwrap();
+    let response = srv.execute(request.send()).unwrap();
 
-    assert_eq!(response.status(), Status::Ok);
-    assert_eq!(response.body_string(), Some("{\"status\":\"OK\"}".into()));
+    assert_eq!(response.status(), http::StatusCode::BAD_REQUEST);
 }
-*/

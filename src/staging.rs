@@ -24,6 +24,10 @@ pub fn get_service_root() -> String {
     format!("/stage/{}", VER)
 }
 
+pub fn get_service_path() -> String {
+    get_service_root() + "/{category}/{subcategory}/{source_name}/{source_uid}"
+}
+
 pub fn index(_req: &HttpRequest) -> impl Responder {
     "Hello World!".to_string()
 }
@@ -52,7 +56,7 @@ pub fn stage(auth: BasicAuth, params: Path<Info>, body: String, req: HttpRequest
                     r#"{"status":"OK"}"#
                 },
                 _ => {
-                    r#"{"error":"Cloud not save document!"}"#
+                    r#"{"error":"Could not save document!"}"#
                 },
             }
         });
