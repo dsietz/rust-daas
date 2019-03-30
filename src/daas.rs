@@ -1,3 +1,4 @@
+use super::*;
 use serde_json::value::*;
 
 static DELIMITER: &str = "|";
@@ -12,6 +13,7 @@ pub struct DaaSDoc{
     pub subcategory: String,
     pub author: String,
     pub process_ind: bool,
+    pub last_updated: u64,
     pub data_obj: Value,
 }
 
@@ -24,6 +26,7 @@ struct DaaSDocNoRev{
     pub subcategory: String,
     pub author: String,
     pub process_ind: bool,
+    pub last_updated: u64,
     pub data_obj: Value,
 }
 
@@ -39,6 +42,7 @@ impl DaaSDoc {
             subcategory: subcat,
             author: auth,
             process_ind: false,
+            last_updated: get_unix_now(),
             data_obj: data,
         }
     }
@@ -60,6 +64,7 @@ impl DaaSDoc {
             subcategory: self.subcategory.clone(),
             author: self.author.clone(),
             process_ind: self.process_ind.clone(),
+            last_updated: get_unix_now(),
             data_obj: self.data_obj.clone(),
         };
 

@@ -23,11 +23,7 @@ pub fn get_run_cmd(prod: &str, start_stop: &str) -> String {
     format!("{}/bin/{}", ZOOKEEPER_DIR, script)
 }
 
-
-
-pub fn produce_message<'a, 'b>(data: &'a [u8], topic: &'b str, brokers: Vec<String>)
-                   -> Result<(), kafka::error::ErrorKind>
-{
+pub fn produce_message<'a, 'b>(data: &'a [u8], topic: &'b str, brokers: Vec<String>) -> Result<(), kafka::error::ErrorKind> {
     let mut client = KafkaClient::new(brokers);
 
     let mut attempt = 0;
@@ -56,12 +52,8 @@ pub fn produce_message<'a, 'b>(data: &'a [u8], topic: &'b str, brokers: Vec<Stri
         value: data,
     })?;
 
-    println!("Message sent! Yeah");
-
     Ok(())
 }
-
-
 
 pub fn run_cmd_with_properties(cmd: String, properties: String) -> Child {
     let child = Command::new(cmd)
