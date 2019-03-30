@@ -79,7 +79,6 @@ let uri = daas::staging::get_service_path()
 
 #[test]
 fn test_stage_data_bad_payload(){
-    let mut rng = rand::thread_rng();
     let uri = daas::staging::get_service_path()
         .replace("{category}","order")
         .replace("{subcategory}","clothing")

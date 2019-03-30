@@ -17,8 +17,10 @@ use base64::{decode};
 
 
 /// globals
-static VER: &str = "v1";
+static ZOOKEEPER_DIR: &str = "C:/kafka/kafka_2.12-2.2.0";
 static DELIMITER: &str = "-";
+static VER: &str = "v1";
+
 
 /// methods
 fn get_unix_now() -> u64 {
@@ -30,6 +32,7 @@ fn get_unix_now() -> u64 {
 
 pub mod daas;
 pub mod couchdb;
+pub mod broker;
 pub mod staging;
 
 //tests

@@ -381,7 +381,7 @@ mod tests {
         let doc = DaaSDoc::new(src.clone(), uid.clone(), cat.clone(), sub.clone(), auth.clone(), data.clone());
 
         match couch.create_doc(db.clone(), doc) {
-            Ok(rslt) => {
+            Ok(_rslt) => {
                 let updt_doc = DaaSDoc::new(src, 6000, cat, sub, auth, data);
                 let doc_id = updt_doc._id.clone();
 

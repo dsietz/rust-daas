@@ -1,11 +1,11 @@
 use super::*;
-use actix_web::{App, http, HttpRequest, HttpResponse, Path, Responder, Result};
+use actix_web::{App, http, HttpRequest, HttpResponse, Path, Responder};
 use actix_web::http::header::Header;
 use actix_web_httpauth::extractors::basic::BasicAuth;
 use super::daas::DaaSDoc;
 use super::couchdb::{CouchDB};
+use broker::*;
 use std::thread;
-use std::fmt::Write;
 use std::time::Duration;
 use kafka::producer::{Producer, Record, RequiredAcks};
 
@@ -52,7 +52,9 @@ pub fn stage(auth: BasicAuth, params: Path<Info>, body: String, req: HttpRequest
         },
     };
 
-    let topic = format!("{}{}{}", cat.clone(), DELIMITER, subcat.clone());
+    let topic = format!("{}{}{}{}{}", cat.clone(), DELIMITER, subcat.clone(), DELIMITER, srcnme.clone());
+    let msg = broker::produce_message("hello message".as_bytes(), &topic.clone(), vec!("localhost:9092".to_string()));
+    /*
     let mut client = kafka::client::KafkaClient::new(vec!("localhost:9092".to_owned()));
     client.load_metadata(&vec![topic.clone()]).unwrap();
         for top in client.topics().names() {
@@ -65,6 +67,7 @@ pub fn stage(auth: BasicAuth, params: Path<Info>, body: String, req: HttpRequest
         .unwrap();
 
     producer.send(&Record::from_value(&topic, "message 1".as_bytes())).unwrap();
+    */
 
     let doc = DaaSDoc::new(srcnme, srcuid, cat, subcat, auth.username().to_string(), data);
 

@@ -19,7 +19,7 @@ addons:
     - gcc
     - zlib1g-dev       
 script:
-     cargo test
+     cargo build
 after_success:
   - |
     wget https://github.com/SimonKagstrom/kcov/archive/master.tar.gz &&
