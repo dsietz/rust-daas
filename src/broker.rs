@@ -96,6 +96,7 @@ pub fn stop_zookeeper() -> Child {
 mod tests {
     use super::*;
 
+    #[ignore]
     #[test]
     fn test_get_run_cmd_start_kafka() {
         let cmd = get_run_cmd("kafka","start");
@@ -111,6 +112,7 @@ mod tests {
         }
     }
 
+    #[ignore]
     #[test]
     fn test_get_run_cmd_stop_kafka() {
         let cmd = get_run_cmd("kafka","stop");
@@ -126,6 +128,7 @@ mod tests {
         }
     }
 
+    #[ignore]
     #[test]
     fn test_get_run_cmd_start_zookeeper() {
         let cmd = get_run_cmd("zookeeper","start");
@@ -141,6 +144,7 @@ mod tests {
         }
     }
 
+    #[ignore]
     #[test]
     fn test_get_run_cmd_stop_zookeeper() {
         let cmd = get_run_cmd("zookeeper","stop");
@@ -156,6 +160,7 @@ mod tests {
         }
     }       
 
+    #[ignore]
     #[test]
     fn test_zookeeper_start_stop() {
         let mut start = start_zookeeper();
@@ -168,9 +173,10 @@ mod tests {
         assert!(stop.success());
     }
 
+    #[ignore]
     #[test]
     fn test_kafka_start_stop() {
-        let mut start = start_kafka();
+        let start = start_kafka();
         
         // sleep for a second
         let sec = time::Duration::from_secs(5);

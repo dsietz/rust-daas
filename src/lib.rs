@@ -34,14 +34,4 @@ pub mod daas;
 pub mod couchdb;
 pub mod broker;
 pub mod staging;
-
-//tests
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_ok() {
-        assert_eq!(1,1);
-    }
-}
+pub mod processor;

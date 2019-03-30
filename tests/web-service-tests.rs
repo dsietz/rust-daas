@@ -55,7 +55,7 @@ fn test_stage_data_ok(){
 
 #[test]
 fn test_stage_data_bad_parameter(){
-let uri = daas::staging::get_service_path()
+    let uri = daas::staging::get_service_path()
         .replace("{category}","order")
         .replace("{subcategory}","clothing")
         .replace("{source_name}","iStore")

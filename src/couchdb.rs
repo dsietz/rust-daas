@@ -200,6 +200,7 @@ mod tests {
         assert_eq!(couch.cluster_setup().unwrap(), StatusCode::Created);
     }    
 
+    #[ignore]
     #[test]
     fn test_create_db_201() {
         let couch = CouchDB::new("admin".to_string(), "password".to_string());
@@ -249,6 +250,7 @@ mod tests {
         
         match couch.get_doc_by_id("test".to_string(),"12345".to_string()) {
             Ok(doc) => {
+                println!("DOC ID: {}", doc._id);
                 assert_eq!(doc._id, "12345".to_string())
             },
             Err(_e) => assert!(false)
