@@ -9,6 +9,11 @@ use std::thread;
 use std::time::Duration;
 use kafka::producer::{Producer, Record, RequiredAcks};
 
+/// globals
+static DB_NAME: &str = "test";
+static DB_USER: &str = "admin";
+static DB_PSWRD: &str = "password";
+
 #[derive(Deserialize)]
 pub struct Info {
     category: String,
@@ -31,12 +36,29 @@ pub fn get_service_path() -> String {
     get_service_root() + "/{category}/{subcategory}/{source_name}/{source_uid}"
 }
 
+fn process_data(couch: CouchDB, id: String, topic: String) -> Result<bool, String>{
+    println!("DOC ID: {}, TOPIC: {}",id, topic);
+    match couch.get_doc_by_id(DB_NAME.to_string(), id) {
+        Ok(mut doc) => {
+            match broker::produce_message(&doc.serialize().as_bytes(), &topic.clone(), vec!("localhost:9092".to_string())) {
+                Ok(_v) => {
+                    doc.process_ind = true;
+                    couch.upsert_doc(DB_NAME.to_string(), doc).unwrap();
+
+                    Ok(true)
+                },
+                _ => Err("Could not broker document".to_string())
+            }
+        },
+        _ => Err("Could not find document.".to_string())
+    }
+}
+
 pub fn index(_req: &HttpRequest) -> impl Responder {
     "Hello World!".to_string()
 }
 
 //https://docs.rs/actix-web-httpauth/0.1.0/actix_web_httpauth/headers/authorization/struct.Authorization.html
-//https://github.com/spicavigo/kafka-rust/issues/135
 pub fn stage(auth: BasicAuth, params: Path<Info>, body: String, req: HttpRequest) -> HttpResponse {
     let cat: String = params.category.clone();
     let subcat: String = params.subcategory.clone();
@@ -53,28 +75,18 @@ pub fn stage(auth: BasicAuth, params: Path<Info>, body: String, req: HttpRequest
     };
 
     let topic = format!("{}{}{}{}{}", cat.clone(), DELIMITER, subcat.clone(), DELIMITER, srcnme.clone());
-    let msg = broker::produce_message("hello message".as_bytes(), &topic.clone(), vec!("localhost:9092".to_string()));
-    /*
-    let mut client = kafka::client::KafkaClient::new(vec!("localhost:9092".to_owned()));
-    client.load_metadata(&vec![topic.clone()]).unwrap();
-        for top in client.topics().names() {
-        println!("topic: {}", top);
-    }
-    let mut producer = Producer::from_hosts(vec!("localhost:9092".to_owned()))
-        .with_ack_timeout(Duration::from_secs(1))
-        .with_required_acks(RequiredAcks::One)
-        .create()
-        .unwrap();
-
-    producer.send(&Record::from_value(&topic, "message 1".as_bytes())).unwrap();
-    */
-
-    let doc = DaaSDoc::new(srcnme, srcuid, cat, subcat, auth.username().to_string(), data);
-
-    let couch = CouchDB::new("admin".to_string(), "password".to_string());
+    //let msg = broker::produce_message("hello message".as_bytes(), &topic.clone(), vec!("localhost:9092".to_string()));
+    
+    let mut doc = DaaSDoc::new(srcnme, srcuid, cat, subcat, auth.username().to_string(), data);
+    let doc_id = doc._id.clone();
+    let couch = CouchDB::new(DB_USER.to_string(), DB_PSWRD.to_string());
     let save = thread::spawn(move || {
-            match couch.upsert_doc("test".to_string(), doc) {
+            match couch.upsert_doc(DB_NAME.to_string(), doc) {
                 Ok(_rslt) => {
+                    //process_data(CouchDB::new(DB_USER.to_string(), DB_PSWRD.to_string()), doc_id, topic).unwrap();
+                    let process = thread::spawn(move || {
+                        process_data(CouchDB::new(DB_USER.to_string(), DB_PSWRD.to_string()), doc_id, topic).unwrap();
+                    });
                     r#"{"status":"OK"}"#
                 },
                 _ => {
@@ -82,7 +94,7 @@ pub fn stage(auth: BasicAuth, params: Path<Info>, body: String, req: HttpRequest
                 },
             }
         });
-    
+
     HttpResponse::Ok()
         .header(http::header::CONTENT_TYPE, "application/json")
         .body(save.join().unwrap())    
