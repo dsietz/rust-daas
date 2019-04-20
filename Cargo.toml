@@ -8,6 +8,14 @@ exclude = [
     "target/*",
 ]
 
+[[bin]]
+name = "sourcing"
+path = "src/bin/daas-sourcing.rs"
+
+[[bin]]
+name = "status_processor"
+path = "src/bin/daas-status-processing.rs"
+
 [lib]
 name = "daas"
 path = "src/lib.rs"

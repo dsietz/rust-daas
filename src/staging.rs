@@ -9,7 +9,7 @@ use std::thread;
 use std::time::Duration;
 
 /// globals
-static DB_NAME: &str = "test";
+static DB_NAME: &str = "sourcing";
 static DB_USER: &str = "admin";
 static DB_PSWRD: &str = "password";
 
