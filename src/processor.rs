@@ -27,7 +27,7 @@ impl OrderStatusProcessor {
         while self.listen_ind {
             for messageset in self.consumer.poll().unwrap().iter() {
                 for message in messageset.messages() {
-                    callback(Message{
+                    callback(Message {
                         offset: message.offset,
                         key: message.key,
                         value: message.value,
