@@ -3,6 +3,10 @@ use serde_json::value::*;
 
 static DELIMITER: &str = "|";
 
+pub fn make_id(cat: String, subcat: String, src_name: String, src_uid: usize) -> String {
+    format!("{}{}{}{}{}{}{}",cat, DELIMITER, subcat, DELIMITER, src_name, DELIMITER, src_uid).to_string()
+}    
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DaaSDoc{
     pub _id: String,
@@ -32,9 +36,8 @@ struct DaaSDocNoRev{
 
 impl DaaSDoc {
     pub fn new(src_name: String, src_uid: usize, cat: String, subcat: String, auth: String, data: Value) -> DaaSDoc {
-        let id = format!("{}{}{}{}{}{}{}",cat, DELIMITER, subcat, DELIMITER, src_name, DELIMITER, src_uid).to_string();
         DaaSDoc{
-            _id: id,
+            _id: make_id(cat.clone(), subcat.clone(), src_name.clone(), src_uid),
             _rev: None,
             source_name: src_name,
             source_uid: src_uid,
@@ -46,6 +49,10 @@ impl DaaSDoc {
             data_obj: data,
         }
     }
+
+    pub fn data_obj_as_ref(&mut self) -> &mut Value {
+        &mut self.data_obj
+    }    
 
     pub fn from_serialized(serialized: &str) -> DaaSDoc {
 		serde_json::from_str(&serialized).unwrap()
