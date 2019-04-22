@@ -16,6 +16,10 @@ path = "src/bin/daas-sourcing.rs"
 name = "status_processor"
 path = "src/bin/daas-status-processing.rs"
 
+[[bin]]
+name = "reporting"
+path = "src/bin/daas-reporting.rs"
+
 [lib]
 name = "daas"
 path = "src/lib.rs"

@@ -34,3 +34,4 @@ pub mod couchdb;
 pub mod broker;
 pub mod staging;
 pub mod processor;
+pub mod data_service;
