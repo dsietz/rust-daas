@@ -16,42 +16,30 @@ static DB_PSWRD: &str = "password";
 static CATEGORY: &str = "history";
 static SUBCATEGORY: &str = "status";
 
-#[derive(Deserialize)]
-pub struct Info {
-    source_name: String,
-    source_uid: usize,
-}
-
 pub fn get_service_root() -> String {
     format!("/data/{}", VER)
 }
 
 pub fn get_service_path() -> String {
-    get_service_root() + "/history/status/{source_name}/{source_uid}"
+    get_service_root() + "/history/status"
 }
 
-pub fn status_history(auth: BasicAuth, params: Path<Info>, _req: HttpRequest) -> HttpResponse {
-    let id = daas::make_id(CATEGORY.to_string(), SUBCATEGORY.to_string(), params.source_name.clone(), params.source_uid as usize);        
-    println!("ID: {}", id);
-
+pub fn status_history(auth: BasicAuth, _req: HttpRequest) -> HttpResponse {
     let couch = CouchDB::new(DB_USER.to_string(), DB_PSWRD.to_string());
-// http://localhost:5984/consuming/_design/history/_view/status-duration?reduce=true&group=true&skip=0&limit=21
     let reply = thread::spawn(move || {
-            match couch.get_doc_by_id(DB_NAME.to_string(), id) {
-                Ok(mut doc) => {
-                    //let results = doc.data_obj_as_ref().as_str().unwrap().to_owned();
-                    println!("Doc: {:?}", doc.data_obj_as_ref());
-                    r#"{"status":"Ok"}"#.to_string()
+            match couch.query_view(DB_NAME.to_string(), "_design/history/_view/status-duration?reduce=true&group=true&skip=0".to_string()) {
+                Ok(results) => {
+                    results
                 },
                 _ => {
-                    r#"{"error":"Could not find the document!"}"#.to_string()
+                    json!({"error":"Could not find the document!"})
                 },
             }
         });
 
     HttpResponse::Ok()
         .header(http::header::CONTENT_TYPE, "application/json")
-        .body(reply.join().unwrap())   
+        .json(reply.join().unwrap())  
 }
 
 pub fn service() -> App {
