@@ -127,7 +127,7 @@ impl CouchDB {
         username.to_owned()
     }    
     
-    pub fn query_view(&self, db: String, resource_path: String) -> Result<Value, String>{
+    pub fn query_view(&self, db: String, resource_path: String) -> Result<String, String>{
         let mut core = tokio_core::reactor::Core::new().unwrap();
         let response = RestClient::get(&format!("{}/{}/{}",self.get_base_url(), db, resource_path))
             .authorization_basic(self.get_username(), self.get_password())
@@ -136,7 +136,7 @@ impl CouchDB {
 
         match response.status() {
             StatusCode::Ok => {
-                Ok(json!(response.content().as_ref_string()))
+                Ok(response.content().as_ref_string().to_string())
             },
             _ => Err(format!("Wrong status code. Status {} was returned.",response.status())),
         }

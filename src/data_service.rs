@@ -24,22 +24,22 @@ pub fn get_service_path() -> String {
     get_service_root() + "/history/status"
 }
 
-pub fn status_history(auth: BasicAuth, _req: HttpRequest) -> HttpResponse {
+pub fn status_history(_auth: BasicAuth, _req: HttpRequest) -> HttpResponse {
     let couch = CouchDB::new(DB_USER.to_string(), DB_PSWRD.to_string());
     let reply = thread::spawn(move || {
-            match couch.query_view(DB_NAME.to_string(), "_design/history/_view/status-duration?reduce=true&group=true&skip=0".to_string()) {
+            match couch.query_view(DB_NAME.to_string(), "_design/history/_view/status-duration?reduce=true&group=true".to_string()) {
                 Ok(results) => {
-                    results
+                    results.clone()
                 },
                 _ => {
-                    json!({"error":"Could not find the document!"})
+                    r#"{"error": "Could not find the document!"}"#.to_string()
                 },
             }
         });
 
     HttpResponse::Ok()
         .header(http::header::CONTENT_TYPE, "application/json")
-        .json(reply.join().unwrap())  
+        .body(reply.join().unwrap())  
 }
 
 pub fn service() -> App {
