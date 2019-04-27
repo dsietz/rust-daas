@@ -7,31 +7,37 @@
 Linux: [![Build Status](https://travis-ci.org/dsietz/rust-daas.svg?branch=master)](https://travis-ci.org/dsietz/rust-daas)
 Windows: [![Build status](https://ci.appveyor.com/api/projects/status/5w1x4q7b8g29ijvi?svg=true)](https://ci.appveyor.com/project/dsietz/rust-daas/branch/master)
 
+---
 
-An example of implementing the DaaS pattern using Rust
+## Hands-On experience with Data as a Service (DaaS)
+
+Should Information Management systems apply the services architecture? Many data provisioning and BI systems are monolithic, tightly coupled, difficult to scale, and stumble when it comes to delivering MVP in a timely manner.
+
+Data as a Service delivers MVP of real-time data management, while avoiding many of the anit-patterns that traditional data provisioning and BI systems portray. Unlike traditional BI tooling, building out a Data as a Service system doesn't require high up-front costs and the welding of multiple products.
+
+Learn how the open source products Talend Open Studio, Kafka, and CouchDB can be used to build out a DaaS system that delivers faster and more scalable solutions to your customer.
+
+In this workshop we will walk-through and implement the key components of the Data as a Service architecture pattern by building out a simple real-time event driven online report.
+
+>### Agenda
+>
+>+ DaaS Architecture Overview
+>+ Building a data sourcing REST endpoint
+>+ Building a the data provisioning service
+>+ Building a data provider REST endpoint
 
 ---
 
-## Modules
+**IMPORTANT:** 
+Participants need to install Rust Toolchain, Kafak, and CouchDB prior to the workshop.
 
 ## Developer Slice Setup
 - [Rust Language](./docs/reference-rust.md)
 - [CouchDB](./docs/reference-couchdb.md)
 - [Kafak](./docs/reference-kafka.md)
 
-### RESTful microservice for realtime staging of data
-- hello world rocket service(staging.rs)
-- test driven development (web-service-tests.rs)
-- staging service with parameters (staging route)
-- authentication
-- add configurations
-
-
-### Microservice for provisioning the event data
-
-### RESTful microservice to publish the report
-
 ---
 
-## Rust Lang
-[Rust related references](./docs/reference-material.md)
+## Workshop Material
++ [Handbook](./docs/handbook.md)
++ [Rust related references](./docs/reference-material.md)
