@@ -9,6 +9,10 @@ exclude = [
 ]
 
 [[bin]]
+name = "hello_world"
+path = "src/bin/hello-world.rs"
+
+[[bin]]
 name = "sourcing"
 path = "src/bin/daas-sourcing.rs"
 
@@ -33,6 +37,8 @@ is-it-maintained-open-issues = { repository = "dsietz/rust-daas" }
 maintenance = {status = "as-is"}
 
 [dependencies]
+log = "0.4.0"
+env_logger = "0.6.1"
 serde ="1.0"
 serde_derive = "1.0"
 serde_json = "1.0.39"

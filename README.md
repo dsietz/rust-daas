@@ -29,7 +29,9 @@ In this workshop we will walk-through and implement the key components of the Da
 ---
 
 **IMPORTANT:** 
-Participants need to install Rust Toolchain, Kafak, and CouchDB prior to the workshop.
+Participants need:
++ Have installed Rust Toolchain, Kafak, and CouchDB prior to the workshop
++ Have internet connect during the workshop
 
 ## Developer Slice Setup
 - [Rust Language](./docs/reference-rust.md)

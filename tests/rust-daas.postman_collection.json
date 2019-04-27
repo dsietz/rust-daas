@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "index",
+			"name": "hello_world",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -15,12 +15,17 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8000",
+					"raw": "http://localhost:7999/hello/v1/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8000"
+					"port": "7999",
+					"path": [
+						"hello",
+						"v1",
+						""
+					]
 				}
 			},
 			"response": []
@@ -54,10 +59,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"leather coat\",\n\t\"status\":\"new\"\n}"
+					"raw": "{\n\t\"name\": \"high heals\",\n\t\"status\":\"new\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8000/stage/v1/order/clothing/iStore/8000",
+					"raw": "http://localhost:8000/stage/v1/order/clothing/iStore/8003",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -69,7 +74,7 @@
 						"order",
 						"clothing",
 						"iStore",
-						"8000"
+						"8003"
 					]
 				}
 			},

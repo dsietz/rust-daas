@@ -1,12 +1,9 @@
 use super::*;
-use actix_web::{App, http, HttpRequest, HttpResponse, Path, Responder};
-use actix_web::http::header::Header;
+use actix_web::{App, http, HttpRequest, HttpResponse, Path};
 use actix_web_httpauth::extractors::basic::BasicAuth;
 use super::daas::DaaSDoc;
 use super::couchdb::{CouchDB};
-use broker::*;
 use std::thread;
-use std::time::Duration;
 
 /// globals
 static DB_NAME: &str = "sourcing";
@@ -52,12 +49,8 @@ fn process_data(couch: CouchDB, id: String, topic: String) -> Result<bool, Strin
     }
 }
 
-pub fn index(_req: &HttpRequest) -> impl Responder {
-    "Hello World!".to_string()
-}
-
 //https://docs.rs/actix-web-httpauth/0.1.0/actix_web_httpauth/headers/authorization/struct.Authorization.html
-pub fn stage(auth: BasicAuth, params: Path<Info>, body: String, _req: HttpRequest) -> HttpResponse {
+pub fn source(auth: BasicAuth, params: Path<Info>, body: String, _req: HttpRequest) -> HttpResponse {
     let cat: String = params.category.clone();
     let subcat: String = params.subcategory.clone();
     let srcnme: String = params.source_name.clone();
@@ -100,12 +93,11 @@ pub fn stage(auth: BasicAuth, params: Path<Info>, body: String, _req: HttpReques
 
 pub fn service() -> App {
     let app = App::new()
+                .middleware(Logger::default())
+                .middleware(Logger::new("%a %{User-Agent}i"))
                 .resource(
-                    "/", 
-                    |r| r.get().f(index))
-                .resource(
-                    &(get_service_root() + "/{category}/{subcategory}/{source_name}/{source_uid}"),
-                    |r| r.post().with(stage));
+                    &get_service_path(),
+                    |r| r.post().with(source));
     app
 }
 
@@ -117,5 +109,10 @@ mod tests {
     #[test]
     fn test_get_service_root() {
         assert_eq!(get_service_root(), format!("/stage/{}", VER));
+    }
+
+    #[test]
+    fn test_get_serive_path() {
+        assert_eq!(get_service_path(), format!("/stage/{}/{}", VER, "{category}/{subcategory}/{source_name}/{source_uid}"));
     }
 }

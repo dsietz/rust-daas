@@ -1,10 +1,10 @@
 use super::*;
-use std::{thread, time};
+use std::{thread};
 use std::time::Duration;
-use std::process::{Child, Command, Output, Stdio};
+use std::process::{Child, Command, Stdio};
 use kafka::client::KafkaClient;
 use kafka::producer::{Producer, Record, RequiredAcks};
-use kafka::error::{ErrorKind, Error as Kafka, KafkaCode};
+use kafka::error::{ErrorKind, KafkaCode};
 
 
 pub fn get_properties_path(prod: &str) ->String{
@@ -95,6 +95,7 @@ pub fn stop_zookeeper() -> Child {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::{time};
 
     #[ignore]
     #[test]
@@ -163,7 +164,7 @@ mod tests {
     #[ignore]
     #[test]
     fn test_zookeeper_start_stop() {
-        let mut start = start_zookeeper();
+        let _start = start_zookeeper();
         
         // sleep for a second
         let sec = time::Duration::from_secs(5);
@@ -176,7 +177,7 @@ mod tests {
     #[ignore]
     #[test]
     fn test_kafka_start_stop() {
-        let start = start_kafka();
+        let _start = start_kafka();
         
         // sleep for a second
         let sec = time::Duration::from_secs(5);

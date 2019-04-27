@@ -1,3 +1,5 @@
+extern crate log;
+extern crate env_logger;
 #[macro_use] extern crate serde_derive;
 #[macro_use] extern crate serde_json;
 extern crate json;
@@ -13,8 +15,7 @@ extern crate kafka;
 
 use std::str;
 use std::time::{SystemTime};
-use base64::{decode};
-
+use actix_web::middleware::Logger;
 
 /// globals
 pub static DELIMITER: &str = "-";
@@ -29,9 +30,11 @@ fn get_unix_now() -> u64 {
     }
 }
 
+
+pub mod hello_world;
 pub mod daas;
 pub mod couchdb;
 pub mod broker;
-pub mod staging;
+pub mod sourcing;
 pub mod processor;
 pub mod data_service;

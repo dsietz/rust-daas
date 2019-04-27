@@ -2,16 +2,15 @@ extern crate actix_web;
 extern crate bytes;
 extern crate json;
 
-use daas::staging;
+use daas::hello_world;
 use actix_web::*;
 use http::header;
 use bytes::Bytes;
-use rand::Rng;
 use serde_json::{Value};
 
 #[test]
-fn test_status_code_ok() {
-    let mut srv =actix_web::test::TestServer::new(|app| app.handler(staging::index));
+fn test_hello_world_ok() {
+    let mut srv =actix_web::test::TestServer::new(|app| app.handler(hello_world::index));
     let request = srv.get().uri(srv.url("/").as_str()).finish().unwrap();
     let response = srv.execute(request.send()).unwrap();
 
@@ -23,16 +22,16 @@ fn test_status_code_ok() {
 }
 
 #[test]
-fn test_stage_data_ok(){
-    let uri = daas::staging::get_service_path()
+fn test_source_data_ok(){
+    let uri = daas::sourcing::get_service_path()
         .replace("{category}","order")
         .replace("{subcategory}","clothing")
         .replace("{source_name}","iStore")
         .replace("{source_uid}","5000");  
     let mut srv =actix_web::test::TestServer::new(|app| {
                         app.resource(
-                            &daas::staging::get_service_path(),
-                            |r| r.post().with(daas::staging::stage)
+                            &daas::sourcing::get_service_path(),
+                            |r| r.post().with(daas::sourcing::source)
                         );
                     });
     let request = srv.post()
@@ -52,18 +51,17 @@ fn test_stage_data_ok(){
     assert_eq!(body["status"], "OK".to_string());
 }
 
-
 #[test]
-fn test_stage_data_bad_parameter(){
-    let uri = daas::staging::get_service_path()
+fn test_source_data_bad_parameter(){
+    let uri = daas::sourcing::get_service_path()
         .replace("{category}","order")
         .replace("{subcategory}","clothing")
         .replace("{source_name}","iStore")
         .replace("{source_uid}","word");  
     let mut srv =actix_web::test::TestServer::new(|app| {
                         app.resource(
-                            &daas::staging::get_service_path(),
-                            |r| r.post().with(daas::staging::stage)
+                            &daas::sourcing::get_service_path(),
+                            |r| r.post().with(daas::sourcing::source)
                         );
                     });
     let request = srv.post()
@@ -78,16 +76,16 @@ fn test_stage_data_bad_parameter(){
 }
 
 #[test]
-fn test_stage_data_bad_payload(){
-    let uri = daas::staging::get_service_path()
+fn test_source_data_bad_payload(){
+    let uri = daas::sourcing::get_service_path()
         .replace("{category}","order")
         .replace("{subcategory}","clothing")
         .replace("{source_name}","iStore")
         .replace("{source_uid}", "112233");  
     let mut srv =actix_web::test::TestServer::new(|app| {
                         app.resource(
-                            &daas::staging::get_service_path(),
-                            |r| r.post().with(daas::staging::stage)
+                            &daas::sourcing::get_service_path(),
+                            |r| r.post().with(daas::sourcing::source)
                         );
                     });
     let request = srv.post()

@@ -33,7 +33,10 @@ impl OrderStatusProcessor {
                         value: message.value,
                     });
                 }
-                self.consumer.consume_messageset(messageset);
+                match self.consumer.consume_messageset(messageset) {
+                    Ok(_c) => {},
+                    Err(err) => panic!("{}",err),
+                }
             }
             self.consumer.commit_consumed().unwrap();
         }
@@ -50,6 +53,6 @@ mod tests {
 
     #[test]
     fn test_new_consumer() {
-        let consumer = OrderStatusProcessor::new("localhost:9092".to_string(), "test".to_string(), "my-group".to_string());
+        let _consumer = OrderStatusProcessor::new("localhost:9092".to_string(), "test".to_string(), "my-group".to_string());
     }
 }

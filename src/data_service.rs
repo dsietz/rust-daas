@@ -1,20 +1,13 @@
 use super::*;
-use actix_web::{App, http, HttpRequest, HttpResponse, Path, Responder};
-use actix_web::http::header::Header;
+use actix_web::{App, http, HttpRequest, HttpResponse};
 use actix_web_httpauth::extractors::basic::BasicAuth;
-use super::daas::{DaaSDoc};
 use super::couchdb::{CouchDB};
-use broker::*;
 use std::thread;
-use std::time::Duration;
-use super::daas::*;
 
 /// globals
 static DB_NAME: &str = "consuming";
 static DB_USER: &str = "admin";
 static DB_PSWRD: &str = "password";
-static CATEGORY: &str = "history";
-static SUBCATEGORY: &str = "status";
 
 pub fn get_service_root() -> String {
     format!("/data/{}", VER)
@@ -44,6 +37,8 @@ pub fn status_history(_auth: BasicAuth, _req: HttpRequest) -> HttpResponse {
 
 pub fn service() -> App {
     let app = App::new()
+                .middleware(Logger::default())
+                .middleware(Logger::new("%a %{User-Agent}i"))
                 .resource(
                     &get_service_path(),
                     |r| r.get().with(status_history));
