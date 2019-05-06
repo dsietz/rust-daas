@@ -15,23 +15,26 @@ Should Information Management systems apply the services architecture? Many data
 
 Data as a Service delivers MVP of real-time data management, while avoiding many of the anit-patterns that traditional data provisioning and BI systems portray. Unlike traditional BI tooling, building out a Data as a Service system doesn't require high up-front costs and the welding of multiple products.
 
-Learn how the open source products Talend Open Studio, Kafka, and CouchDB can be used to build out a DaaS system that delivers faster and more scalable solutions to your customer.
+Get hands-on experience learning how the Rust language, a Kafka broker, and CouchDB cluster can be used to build out a DaaS system that delivers faster and more scalable solutions to your customer.
 
 In this workshop we will walk-through and implement the key components of the Data as a Service architecture pattern by building out a simple real-time event driven online report.
 
->### Agenda
+
+>In this workshop you will learn how to 
 >
->+ DaaS Architecture Overview
->+ Building a data sourcing REST endpoint
->+ Building a the data provisioning service
->+ Building a data provider REST endpoint
+>+ create RESTful services in Rust
+>+ broker the events using Kafka
+>+ provide data analytics as a service
 
 ---
 
-**IMPORTANT:** 
-Participants need:
+__IMPORTANT:__ Participants need to ...
+
++ Bring their own development devices
 + Have installed Rust Toolchain, Kafak, and CouchDB prior to the workshop
 + Have internet connect during the workshop
+
+---
 
 ## Developer Slice Setup
 - [Rust Language](./docs/reference-rust.md)
