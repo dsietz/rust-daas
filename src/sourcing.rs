@@ -49,7 +49,6 @@ fn process_data(couch: CouchDB, id: String, topic: String) -> Result<bool, Strin
     }
 }
 
-//https://docs.rs/actix-web-httpauth/0.1.0/actix_web_httpauth/headers/authorization/struct.Authorization.html
 pub fn source(auth: BasicAuth, params: Path<Info>, body: String, _req: HttpRequest) -> HttpResponse {
     let cat: String = params.category.clone();
     let subcat: String = params.subcategory.clone();
