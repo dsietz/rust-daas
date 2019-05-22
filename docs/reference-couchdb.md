@@ -1,4 +1,4 @@
-# Getting Started
+# CouchDB : Getting Started
 
 ### CouchDB
 - [Homepage](http://couchdb.apache.org/)

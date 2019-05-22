@@ -1,5 +1,4 @@
 # Data as a Service Workshop
-
 In this workshop you will learn how to 
 + create RESTful services in Rust
 + broker the events using Kafka
