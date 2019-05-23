@@ -1,10 +1,19 @@
 # Data as a Service Workshop
-In this workshop you will learn how to 
-+ create RESTful services in Rust
-+ broker the events using Kafka
-+ provide data analytics as a service
+
+## Objective
+> The goal of this workshop is to provide participants with the hands-on experience to build out a DaaS architecture pattern.
+
+In this workshop you will learn: 
++ Overview of the DaaS pattern
++ Overview of the Rust language
++ How to create RESTful services in Rust
++ How to broker the events using Kafka
++ How to provide data analytics as a service
 
 ---
+## Module I
++ [_Overview of the DaaS Pattern_](daas-pattern.md)
+
 
 ## Module I
 _Creating a Hello World RESTful service_
