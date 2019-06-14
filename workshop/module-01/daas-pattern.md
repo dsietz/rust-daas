@@ -5,5 +5,8 @@ Data as a Service is an agile architecture pattern that allows real-time data pr
 ---
 
 ### Section I
-<a name="daas-pattern"></a>
+
 ![DaaS Pattern](daas-pattern.png)
+
+### Section II
+![DaaS Pattern](sourcing-service.png)

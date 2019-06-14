@@ -12,7 +12,7 @@ In this workshop you will learn:
 
 ---
 ## Module I
-+ [_Overview of the DaaS Pattern_](modeule-01/daas-pattern.md#daas-pattern)
++ [_Overview of the DaaS Pattern_](module-01/daas-pattern.md#daas-pattern)
 
 
 ## Module I
