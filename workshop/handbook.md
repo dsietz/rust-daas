@@ -24,8 +24,6 @@ Prior to starting the workshop, make sure
 - [CouchDB](../docs/reference-couchdb.md)
 - [Kafak](../docs/reference-kafka.md)
 
-### More Material
-+ [Rust related references](../docs/reference-material.md)
 
 
 

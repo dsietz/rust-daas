@@ -45,4 +45,3 @@ __IMPORTANT:__ Participants need to ...
 
 ## Workshop Material
 + [Workshop Manual](https://davidsietz.gitbook.io/workspace/)
-+ [Rust related references](./docs/reference-material.md)
