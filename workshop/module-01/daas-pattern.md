@@ -9,6 +9,7 @@ Data as a Service is an agile architecture pattern that allows real-time data pr
 >by Agile Innolution Solutions
 
 
+
 >The minimum viable product is that version of a new product a team uses to collect the maximum amount of validated learning about customers with the least effort.
 >
 >by Eric Ries
