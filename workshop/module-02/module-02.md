@@ -1,6 +1,7 @@
 ## Module II - Building A Rust Project
 
 In this module we will create a _Hello World_ RESTful service
+
 1. Creating a project in Rust
 2. Parts of a package: Cargo.toml, src/lib.rs vs. src/bin, modules
 3. Test Driven Development
