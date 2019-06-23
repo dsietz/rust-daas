@@ -7,3 +7,8 @@
     * [Section III - _Data Provisioning_](workshop/module-01/section-03.md)
     * [Section IV - _Data Consumption_](workshop/module-01/section-04.md)
 * [Module II - _Building a Rust Project_](workshop/module-02/module-02.md)
+    * [Section I - _Create a Package_](workshop/module-02/section-01.md)
+    * [Section II - _Creating a Library_](workshop/module-02/section-02.md)
+    * [Section III - _Creating an Executable_](workshop/module-02/section-03.md)
+    * [Section IV - _Creating a Hello World RESTful Endpoint_](workshop/module-02/section-04.md)
+    * [Section IV - _Adding Middleware for Logging_](workshop/module-02/section-05.md)
