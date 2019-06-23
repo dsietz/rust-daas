@@ -1,6 +1,6 @@
 # Data as a Service Workshop
 
-* [Intorduction](workshop/handbook.md)
+* [Introduction](workshop/handbook.md)
 * [Module I - _Overview of the DaaS Pattern_](workshop/module-01/daas-pattern.md)
     * [Section I - _The Overall Pattern_](workshop/module-01/section-01.md)
     * [Section II - _Data Sourcing_](workshop/module-01/section-02.md)

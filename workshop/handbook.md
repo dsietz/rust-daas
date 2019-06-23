@@ -11,6 +11,26 @@ In this workshop you will learn:
 + How to provide data analytics as a service
 
 ---
+
+**IMPORTANT**
+Prior to starting the workshop, make sure 
+
++ you have a laptop for developing on
++ have internet connection
++ have successfully installed the Rust Toolchain, Kafak, and CouchDB
+
+## Developer Slice Setup
+- [Rust Language](../docs/reference-rust.md)
+- [CouchDB](../docs/reference-couchdb.md)
+- [Kafak](../docs/reference-kafka.md)
+
+### More Material
++ [Rust related references](../docs/reference-material.md)
+
+
+
+
+
 ## Module I
 + [_Overview of the DaaS Pattern_](module-01/daas-pattern.md)
 
