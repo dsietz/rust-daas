@@ -1,5 +1,7 @@
 # Data as a Service Workshop
 
+![logo](logo_transparent.png)
+
 ## Objective
 > The goal of this workshop is to provide participants with the hands-on experience to build out a DaaS architecture pattern.
 
