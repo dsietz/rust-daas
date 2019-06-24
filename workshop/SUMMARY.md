@@ -11,4 +11,8 @@
     * [Section II - _Creating a Library_](workshop/module-02/section-02.md)
     * [Section III - _Creating an Executable_](workshop/module-02/section-03.md)
     * [Section IV - _Creating a Hello World RESTful Endpoint_](workshop/module-02/section-04.md)
+      * [Section IV - _manifest_](workshop/module-02/section-04-1.md)
+      * [Section IV - _library_](workshop/module-02/section-04-2.md)
+      * [Section IV - _module_](workshop/module-02/section-04-3.md)
+      * [Section IV - _executable_](workshop/module-02/section-04-4.md)
     * [Section IV - _Adding Middleware for Logging_](workshop/module-02/section-05.md)

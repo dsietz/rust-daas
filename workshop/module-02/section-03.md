@@ -25,14 +25,14 @@ pub fn main() {
 [user@localhost rust-daas]$ cargo run
    Compiling rust-daas v0.1.0 (C:\workspace\rust-daas)
     Finished dev [unoptimized + debuginfo] target(s) in 0.67s
-     Running `target\debug\hello-world.exe`
+     Running `target\debug\hello_world.exe`
 Hello World
 ```
 
-> There should now be an executable named **hello-world** in the /target/debug directory which you can execute directly.
+> There should now be an executable named **hello_world** in the /target/debug directory which you can execute directly.
 
 ```
 [user@localhost rust-daas]$  cd .\target\debug\
-[user@localhost debug]$ ./hello-world
+[user@localhost debug]$ ./hello_world
 Hello World
 ```
