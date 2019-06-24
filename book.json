@@ -2,6 +2,6 @@
     "structure": {
         "title": "Building the DaaS Pattern using Rust",
         "description": "Data as a Service delivers MVP of real-time data management, while avoiding many of the anit-patterns that traditional data provisioning and BI systems portray. Unlike traditional BI tooling, building out a Data as a Service system doesn't require high up-front costs and the welding of multiple products.",
-        "readme": "handbook.md"
+        "readme": "workshop/handbook.md"
     }
 }
