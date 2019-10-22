@@ -15,4 +15,4 @@
       * [Section IV - _library_](workshop/module-02/section-04-2.md)
       * [Section IV - _module_](workshop/module-02/section-04-3.md)
       * [Section IV - _executable_](workshop/module-02/section-04-4.md)
-    * [Section IV - _Adding Middleware for Logging_](workshop/module-02/section-05.md)
+    * [Section V - _Adding Middleware for Logging_](workshop/module-02/section-05.md)
