@@ -1,9 +1,9 @@
 # Kafka : Getting Started
 
-### CouchDB
+### Kafka
 - [Homepage](http://kafka.apache.org/)
 
-### Installing CouchDB
+### Installing Kafka
 - [Quickstart](https://kafka.apache.org/quickstart)
 
 ### Further Learning
