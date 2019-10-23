@@ -234,17 +234,82 @@ To create integrated tests, first create a new file named **_web-service-tests.r
 |-- Cargo.toml  
 ```
 
-The 
-
+In order to execute our service test, we will first need to include the `bytes` library to our project. We do this by adding the line `bytes = "0.4"` in the `[dependencies]` section of the **_Cargo.toml_** file.
 
 ```
-pub fn service() -> App {
-    let app = App::new()
-                .middleware(Logger::default())
-                .middleware(Logger::new("%a %{User-Agent}i"))
-                .resource(
-                    &get_service_path(), 
-                    |r| r.get().f(index));
-    app
+[dependencies]
+hyper = "0.11.0"
+actix-web = "0.7"
+bytes = "0.4"
+```
+
+Once the library has been included in the Manifest, we define which libraries are required in the **_web-service-tests_** module by adding the following lines at the top of the **_web-service-tests.rs_** file.
+
+```
+extern crate actix_web;
+extern crate bytes;
+```
+
+The `extern` declarations specify the dependent crates (or libraries) that will be used in the **_web-service-tests_** module. 
+
+We then declare the bindings (or shortcuts) to a resources that will be used in the **_web-service-tests_** module. This is done by adding the following lines below the `extern` crate declarations.
+
+```
+use daas::hello_world;
+use actix_web::*;
+use http::header;
+use bytes::Bytes;
+```
+
+Now we can add the code for our Hello World service test, which is added below the `use` declarations.
+
+```
+#[test]
+fn test_hello_world_ok() {
+    let mut srv =actix_web::test::TestServer::new(|app| app.handler(hello_world::index));
+    let request = srv.get().uri(srv.url("/").as_str()).finish().unwrap();
+    let response = srv.execute(request.send()).unwrap();
+
+    assert!(response.status().is_success());
+
+    // read response
+    let bytes = srv.execute(response.body()).unwrap();
+    assert_eq!(bytes, Bytes::from_static("Hello World!".as_ref()));
 }
 ```
+
+At this point the **_web-service-tests.rs_** file should look like this:
+
+```
+extern crate actix_web;
+extern crate bytes;
+
+use daas::hello_world;
+use actix_web::*;
+use http::header;
+use bytes::Bytes;
+
+#[test]
+fn test_hello_world_ok() {
+    let mut srv =actix_web::test::TestServer::new(|app| app.handler(hello_world::index));
+    let request = srv.get().uri(srv.url("/").as_str()).finish().unwrap();
+    let response = srv.execute(request.send()).unwrap();
+
+    assert!(response.status().is_success());
+
+    // read response
+    let bytes = srv.execute(response.body()).unwrap();
+    assert_eq!(bytes, Bytes::from_static("Hello World!".as_ref()));
+}
+```
+
+Try running your test with the `cargo test` command. There should now be a line in the results referencing that the `web_service_tests` has run.
+
+```
+
+     Running target\debug\deps\web_service_tests-664800ae8a37eeb0.exe
+
+running 1 test
+test test_hello_world_ok ... ok
+```
+
