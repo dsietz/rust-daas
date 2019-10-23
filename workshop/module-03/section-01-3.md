@@ -1,5 +1,5 @@
 #### Creating the module
->[hello_world.rs](https://github.com/dsietz/rust-daas/blob/master/src/daas.rs)
+>[dass.rs](https://github.com/dsietz/rust-daas/blob/master/src/daas.rs)
 
 To create the module, create a new file named **_daas.rs_** in the **/src** directory.
 
