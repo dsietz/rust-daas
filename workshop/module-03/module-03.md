@@ -1,8 +1,5 @@
-## Module III - Building a RESTful Endpoint for Sourcing Data
+## Module III - Building the Dependent Modules
 
-In this module we will create a _Data Staging_ RESTful service which will be listening for data that is sent from the source to be staged.
+Before we begin constructing our first RESTful service for the DaaS Pattern, we need to first review the architecture overview of the DaaS Pattern. We see in the pattern that our DaaS services interact with a **database**, (we will be using CouchDB) and a **broker** (we will be using Kafka). There is also a **data pattern**, (a metadata data model) that causes the DaaS pPattern to become a reactive architecture. 
 
-1. Declaring dependencies
-2. Constructing the _sourcing_ module
-3. Constructing the executable for the RESTful service
-4. Sourcing Data with Postman
+![DaaS Pattern](daas-pattern.png)
