@@ -283,3 +283,4 @@ We continue to add functionality by constructing the other necessary functions i
     }    
 ```
 
+> Make sure to rerun the `cargo test` command to ensure all your tests pass.
