@@ -15,3 +15,9 @@
       * [Section IV - _library_](workshop/module-02/section-04-2.md)
       * [Section IV - _module_](workshop/module-02/section-04-3.md)
       * [Section IV - _executable_](workshop/module-02/section-04-4.md)
+* [Module III - _Building a RESTful Endpoint for Sourcing Data_](workshop/module-03/module-03.md)
+    * [Section I - _Declaring Dependencies_](workshop/module-03/section-01.md)
+    * [Section II - _Constructing the _sourcing_ module_](workshop/module-03/section-02.md)
+    * [Section III - _Constructing the executable for the RESTful service_](workshop/module-03/section-03.md)
+    * [Section IV - _Sourcing Data with Postman_](workshop/module-03/section-04.md)
+    
