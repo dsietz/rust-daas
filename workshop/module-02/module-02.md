@@ -8,4 +8,3 @@ In this module we will create a _Hello World_ RESTful service
    - unit testing
    - integrated testing
 4. Build a Hello World RESTful endpoint
-5. Adding a middleware for logging
