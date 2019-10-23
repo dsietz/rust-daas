@@ -32,5 +32,4 @@
     * [Section I - _Declaring Dependencies_](workshop/module-04/section-01.md)
     * [Section II - _Constructing the sourcing Module_](workshop/module-04/section-02.md)
     * [Section III - _Constructing the Executable for the RESTful Service_](workshop/module-04/section-03.md)
-    * [Section IV - _Sourcing Data with Postman_](workshop/module-04/section-04.md)
-    
+    * [Section IV - _Sourcing Data with Postman_](workshop/module-04/section-04.md)    
