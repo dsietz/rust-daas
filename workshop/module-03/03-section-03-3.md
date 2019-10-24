@@ -79,3 +79,4 @@ pub fn produce_message<'a, 'b>(data: &'a [u8], topic: &'b str, brokers: Vec<Stri
 }
 ```
 
+> Now is a good time to rerun the `cargo test` command to ensure all your tests still pass.
