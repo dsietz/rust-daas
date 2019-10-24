@@ -20,7 +20,6 @@ use actix_web::middleware::Logger;
 /// globals
 pub static DELIMITER: &str = "-";
 pub static KAFKA_BROKERS: &str = "localhost:9092";
-static ZOOKEEPER_DIR: &str = "C:/kafka/kafka_2.12-2.2.0";
 static VER: &str = "v1";
 
 /// methods
