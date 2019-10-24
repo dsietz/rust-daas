@@ -1,0 +1,13 @@
+{
+  "_id": "upsert_existing_doc",
+  "source_name": "srcnme",
+  "source_uid": 1571927317,
+  "category": "cat",
+  "subcategory": "subcat",
+  "author": "istore_app",
+  "process_ind": false,
+  "last_updated": 1571926795,
+  "data_obj": {
+    "status": "new"
+  }
+}
