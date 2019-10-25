@@ -41,7 +41,6 @@ pub fn produce_message<'a, 'b>(data: &'a [u8], topic: &'b str, brokers: Vec<Stri
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::{time};
 
     #[test]
     fn test_send_message() {

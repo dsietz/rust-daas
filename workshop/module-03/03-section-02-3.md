@@ -19,6 +19,10 @@ use super::daas::{DaaSDoc};
 
 ##### Tests
 
+> NOTE: These tests require preexisting documents in CouchDB in the `test` database. The documents are:
+> 1. []()
+> 
+ 
 First create the tests for this module as a nested module at the bottom of the file.
 
 ```

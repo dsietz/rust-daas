@@ -1,10 +1,14 @@
-### Section I
+### Section II
+>[lib.rs](https://github.com/dsietz/rust-daas/blob/master/src/lib.rs)
 
-In Module II, we build out a RESTful service that responded with "Hello World!" whenever a GET call was made to the service. The coding of this service was comprised of 3 basic parts.
+We will also declare these dependencies in our share `src/lib.rs` library.
 
-1. Declarations of dependent, (e.g.: Crates.toml, `extern crate` and `use`)
-2. Constructing the module, (e.g.: src/hello_world.rs)
-3. Constructing the executable service, (e.g.: src/bin/hello-world.rs)
+```
+extern crate actix_web_httpauth;
+```
 
----
+To add the _daas_ module to our library, we declare it at the bottom of our `src/lib.rs` file, (after the broker module).
 
+```
+pub mod sourcing;
+```

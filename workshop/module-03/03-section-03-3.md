@@ -24,7 +24,6 @@ First create the tests for this module as a nested module at the bottom of the f
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::{time};
 
     #[test]
     fn test_send_message() {
