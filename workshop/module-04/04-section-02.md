@@ -1,6 +1,8 @@
 ### Section II
 >[lib.rs](https://github.com/dsietz/rust-daas/blob/master/src/lib.rs)
 
+---
+
 We will also declare these dependencies in our share `src/lib.rs` library.
 
 ```

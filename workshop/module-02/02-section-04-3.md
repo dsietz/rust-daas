@@ -1,6 +1,8 @@
 #### Creating the module
 >[hello_world.rs](https://github.com/dsietz/rust-daas/blob/master/src/hello_world.rs)
 
+---
+
 To create the module, create a new file named **_hello_world.rs_** in the **/src** directory. 
 
 To begin, we will follow some basic TDD practices and build our tests first. 

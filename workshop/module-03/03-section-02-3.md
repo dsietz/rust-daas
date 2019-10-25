@@ -1,6 +1,8 @@
 #### Creating the module
 >[couchdb.rs](https://github.com/dsietz/rust-daas/blob/master/src/couchdb.rs)
 
+---
+
 To create the module, create a new file named **_couchdb.rs_** in the **/src** directory.
 
 > Now is a good time to rerun the `cargo test` command to ensure all your tests still pass.

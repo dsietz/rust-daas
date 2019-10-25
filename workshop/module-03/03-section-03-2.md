@@ -1,6 +1,8 @@
 #### Updating the library
 >[lib.rs](https://github.com/dsietz/rust-daas/blob/master/src/lib.rs)
 
+---
+
 We will now need to define the `kafka` crate dependency in our share `src/lib.rs` library.
 
 ```
