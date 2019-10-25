@@ -25,3 +25,4 @@ Prior to starting the workshop, make sure
 - [Rust Language](../docs/reference-rust.md)
 - [CouchDB](../docs/reference-couchdb.md)
 - [Kafak](../docs/reference-kafka.md)
+- [Postman](./docs/reference-postman.md)
