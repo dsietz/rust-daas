@@ -19,9 +19,9 @@ use super::daas::{DaaSDoc};
 
 ##### Tests
 
-> NOTE: These tests require preexisting documents in CouchDB in the `test` database. The documents are:
-> 1. []()
-> 
+> NOTE: These tests require preexisting documents in CouchDB in the `test` database. You will need to create the `test` database and then create the following documents in the `test` database:
+> 1. [doc-12345](https://github.com/dsietz/rust-daas/blob/master/tests/database/doc-12345.json)
+> 2. [doc-upsert_existing_doc](https://github.com/dsietz/rust-daas/blob/master/tests/database/doc-upsert_existing_doc.json)
  
 First create the tests for this module as a nested module at the bottom of the file.
 

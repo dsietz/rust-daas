@@ -35,7 +35,7 @@ pub fn get_service_path() -> String {
 fn process_data(couch: CouchDB, id: String, topic: String) -> Result<bool, String>{
     match couch.get_doc_by_id(DB_NAME.to_string(), id) {
         Ok(mut doc) => {
-            match broker::produce_message(&doc.serialize().as_bytes(), &topic.clone(), vec!("localhost:9092".to_string())) {
+            match broker::produce_message(&doc.serialize().as_bytes(), &topic.clone(), vec!(KAFKA_BROKERS.to_string())) {
                 Ok(_v) => {
                     doc.process_ind = true;
                     couch.upsert_doc(DB_NAME.to_string(), doc).unwrap();
