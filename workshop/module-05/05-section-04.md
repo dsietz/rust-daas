@@ -133,3 +133,54 @@ pub fn main() {
 
 
 >Try to rerun the `cargo test` command, and ensure that all the test pass.
+
+##### Running the Microsservice
+
+On the command line, run the `cargo run --bin status_processor` command to start the service. (Or open a new command terminal and start the service using the executable in the target/debug directory).
+
+```
+PS C:\workspace\rust-daas> cargo run --bin status_processor
+    Finished dev [unoptimized + debuginfo] target(s) in 0.42s
+     Running `target\debug\status_processor.exe`
+processed order status history for "iStore" order number 8003.
+processed order status history for "iStore" order number 8003.
+processed order status history for "iStore" order number 8004.
+``
+
+Look in the CouchDB `provisioning` database and there should be documents for the aggregates by order number.
+
+_Example_
+
+```
+{
+  "_id": "history|status|iStore|8003",
+  "_rev": "3-9b8f57b145ddfea0e3fec0147a6cb835",
+  "source_name": "iStore",
+  "source_uid": 8003,
+  "category": "history",
+  "subcategory": "status",
+  "author": "istore_app",
+  "process_ind": false,
+  "last_updated": 1572027379,
+  "data_obj": {
+    "order_number": 8003,
+    "order_status": [
+      {
+        "name": "new",
+        "timestamp": 1572021078
+      },
+      {
+        "name": "new",
+        "timestamp": 1572021537
+      },
+      {
+        "name": "acknowledge",
+        "timestamp": 1572027549
+      }
+    ],
+    "order_type": "clothing",
+    "store_name": "iStore",
+    "timestamp": 1572021078
+  }
+}
+```
