@@ -1,6 +1,8 @@
 ### Section III
 >[sourcing.rs](https://github.com/dsietz/rust-daas/blob/master/src/sourcing.rs)
 
+---
+
 To create the module, create a new file named **_sourcing.rs_** in the **/src** directory.
 
 > Now is a good time to rerun the `cargo test` command to ensure all your tests still pass.
@@ -28,7 +30,7 @@ static DB_PSWRD: &str = "password";
 
 ##### Tests
 
-Add the following unit test tot eh bottom of the module.
+Add the following unit test to the bottom of the module.
 
 ```
 #[cfg(test)]

@@ -33,3 +33,7 @@
     * [Section II - _Constructing the sourcing Module_](workshop/module-04/04-section-02.md)
     * [Section III - _Constructing the Executable for the RESTful Service_](workshop/module-04/04-section-03.md)
     * [Section IV - _Sourcing Data with Postman_](workshop/module-04/04-section-04.md)    
+* [Module V - _Building a Microservice for Processing the Sourced Data_](workshop/module-05/module-05.md)
+    * [Section I - _Declaring Dependencies_](workshop/module-05/05-section-01.md)
+    * [Section II - _Constructing the processor Module_](workshop/module-05/05-section-02.md)
+    * [Section III - _Constructing the Executable for the Processing Service_](workshop/module-05/05-section-03.md)

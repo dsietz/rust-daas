@@ -1,3 +1,38 @@
+### Section IV
+>[Cargo.toml](https://github.com/dsietz/rust-daas/blob/master/Cargo.toml)
+>[daas-status-processing.rs](https://github.com/dsietz/rust-daas/blob/master/src/bin/daas-status-processing.rs)
+
+---
+
+We are now ready to write the executable. To do this, we will working with the following files:
+
++ Cargo.toml (manifest)
++ src/bin/daas-status-processing.rs (executable) 
+
+##### Tests
+
+ 
+##### Code
+
+**Declaring the Executable**
+
+In the `Cargo.toml` file, after the that last `[[bin]]` statement for _sourcing_, add the following declaration.
+
+```
+[[bin]]
+name = "status_processor"
+path = "src/bin/daas-status-processing.rs"
+```
+
+This will tell Cargo that there is a binary file to be compiled and to name the exeutable **status_processor**.
+
+**Coding the Executable** 
+
+Let's begin by creating a file named `daas-status-processing.rs` in the `src/bin/` directory.
+
+At the top of the file, we will start be declare the dependent crate with macros and the `use` statements.
+
+```
 #[macro_use] extern crate serde_derive;
 
 use daas::{DELIMITER};
@@ -6,18 +41,29 @@ use daas::processor::{OrderStatusProcessor};
 use daas::couchdb::{CouchDB};
 use serde_json::{json, Value};
 use daas::KAFKA_BROKERS;
+```
 
-/// globals
+We then define the module variables for this executable.
+
+```
 static DB_NAME: &str = "provisioning";
 static DB_USER: &str = "admin";
 static DB_PSWRD: &str = "password";
+```
 
+To make our work easier, we will utilize a `StatusRecord` object to handle the status data.
+
+```
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StatusRecord{
     pub name: String,
     pub timestamp: u64,
 }
+```
 
+Next we need to provide the supportive function to handle updating the status history. 
+
+```
 fn update_order_status_history(order: Value) -> Result<bool, String>{
     let category = "history".to_string();
     let subcategory = "status".to_string();
@@ -59,7 +105,11 @@ fn update_order_status_history(order: Value) -> Result<bool, String>{
         }
     }
 }
+```
 
+Now, we are ready to writ ethe `main()` function that will be called when the executable starts.
+
+```
 pub fn main() {
     let topic = format!("{}{}{}{}{}", "order", DELIMITER, "clothing", DELIMITER, "iStore");
 
@@ -74,3 +124,12 @@ pub fn main() {
             }
         });
 }
+```
+
+
+> **IMPORTANT** 
+> + You will need to create a database named `provisioning` in CouchDB in order for this service to work.
+> + You will need to create a topic named `test` in the Kafka broker in order for this unit tests to pass.
+
+
+>Try to rerun the `cargo test` command, and ensure that all the test pass.
