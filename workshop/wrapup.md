@@ -9,8 +9,8 @@ Data has quickly become the most valuable commodity in IT. Like any commodity, m
 
 #### Rewards
 + Return On Investment (ROI)
-+ Last Responsible Moment
-+ Mean Time To Deliver (MTTD)
++ Last Responsible Moment (LRM)
++ On Time To Delivery
 
 #### Volatility
 + Adaptability
