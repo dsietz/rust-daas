@@ -15,17 +15,23 @@ Now you can open the `report data` POST request in Postman and monitor the loggi
 
 >**Note** If you get an error message stating "Could not broker document", then make sure to go into the `lib.rs` file and check the value of the KAFKA_BROKERS variable. 
 
-The response payload should be the following:
+The response payload should be something similar to the following:
 
 ```
 {
-    "status": "OK"
+    "rows": [
+        {
+            "key": "acknowledge",
+            "value": 108
+        },
+        {
+            "key": "new",
+            "value": 4
+        },
+        {
+            "key": "shipped",
+            "value": 0
+        }
+    ]
 }
-```
-
-> _TIP_ If you start up a consumer (e.g.: [Quick Start - Step 5](https://kafka.apache.org/quickstart#quickstart_consume)), you should see the brokered DaaS object. 
-> 
-```
-[kafka@brokerserver kafka_2.12-2.3.0]# bin/kafka-console-consumer.sh --bootstrap-server mybroker:9092 --topic order-clothing-iStore --from-beginning
-{"_id":"order|clothing|iStore|8003","_rev":"2-c295ee927aff853b50814447981173e0","source_name":"iStore","source_uid":8003,"category":"order","subcategory":"clothing","author":"istore_app","process_ind":false,"last_updated":1572021078,"data_obj":{"name":"high heals","status":"new"}}
 ```

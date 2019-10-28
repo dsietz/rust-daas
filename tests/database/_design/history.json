@@ -1,6 +1,5 @@
 {
     "_id": "_design/history",
-    "_rev": "27-7f04bb2d2f56b3d916d7efda3ba04aaf",
     "views": {
       "status-duration": {
         "map": "function (doc) {\n  \n  for(s = 0; s < doc.data_obj.order_status.length; s++) {\n    var duration = doc.data_obj.order_status[s].timestamp - doc.data_obj.timestamp;\n    emit(doc.data_obj.order_status[s].name, duration/60);\n  }\n}",
@@ -8,4 +7,4 @@
       }
     },
     "language": "javascript"
-  }
+}
