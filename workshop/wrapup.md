@@ -1,6 +1,6 @@
 # Wrap Up
 
-Data has quickly become the most valuable commodity in IT. Like any commodity, management of the Data is routinely measured against its Risks, Rewards, and Volitility. 
+Data has quickly become the most valuable commodity in IT. Like any commodity, management of the Data is routinely measured against its Risks, Rewards, and Volatility. 
 
 #### Risks
 + Security
@@ -12,7 +12,7 @@ Data has quickly become the most valuable commodity in IT. Like any commodity, m
 + Last Responsible Moment
 + Mean Time To Deliver (MTTD)
 
-#### Volitility
+#### Volatility
 + Adaptability
 + Scalability
 + Availability
