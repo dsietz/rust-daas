@@ -47,3 +47,4 @@
       * [Section IV - _database_](workshop/module-06/06-section-04-1.md)
       * [Section IV - _executable_](workshop/module-06/06-section-04-2.md)
     * [Section V - _testing_](workshop/module-06/06-section-05.md)    
+* [Wrap Up](workshop/wrapup.md)
