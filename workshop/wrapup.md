@@ -2,17 +2,17 @@
 
 Data has quickly become the most valuable commodity in IT. Like any commodity, management of the Data is routinely measured against its Risks, Rewards, and Volitility. 
 
-### Risks
+#### Risks
 + Security
 + Data Privacy
 + Usability
 
-### Rewards
+#### Rewards
 + Return On Investment (ROI)
 + Last Responsible Moment
 + Mean Time To Deliver (MTTD)
 
-### Volitility
+#### Volitility
 + Adaptability
 + Scalability
 + Availability
